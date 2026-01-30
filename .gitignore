@@ -1,10 +1,13 @@
 # build output
 dist/
+out/
 
 # generated types
 .astro/
 .vscode/
+.agents/
 
+.npm-cache/
 .trae/
 .shared/
 # dependencies

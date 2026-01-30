@@ -11,6 +11,8 @@ import SmoothScroll from '../components/SmoothScroll';
 		<meta name="generator" content={Astro.generator} />
 		<title>Astro Basics</title>
 		<style is:global>
+			@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap');
+
 			@font-face {
 				font-family: 'Emblema One';
 				src: url('/fonts/EmblemaOne-Regular.ttf') format('truetype');
@@ -18,9 +20,39 @@ import SmoothScroll from '../components/SmoothScroll';
 				font-style: normal;
 				font-display: swap;
 			}
+
+			/* CRT Scanline Effect */
+			.crt::before {
+				content: " ";
+				display: block;
+				position: fixed;
+				top: 0;
+				left: 0;
+				bottom: 0;
+				right: 0;
+				background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+				z-index: 9999;
+				background-size: 100% 2px, 3px 100%;
+				pointer-events: none;
+			}
+			
+			/* Pixel Art Scrollbar */
+			::-webkit-scrollbar {
+				width: 12px;
+			}
+			::-webkit-scrollbar-track {
+				background: #0F0F23;
+			}
+			::-webkit-scrollbar-thumb {
+				background: #7C3AED;
+				border: 2px solid #0F0F23;
+			}
+			::-webkit-scrollbar-thumb:hover {
+				background: #F43F5E;
+			}
 		</style>
 	</head>
-	<body class="bg-white text-slate-900 antialiased">
+	<body class="bg-[#0F0F23] text-[#E2E8F0] antialiased selection:bg-[#F43F5E] selection:text-white crt font-['VT323'] text-lg">
 		<div id="smooth-wrapper">
 			<div id="smooth-content">
 				<slot />

@@ -2,6 +2,7 @@
 import CardNav from '../components/CardNav';
 import RotatingText from '../components/RotatingText';
 import TimeProgress from '../components/TimeProgress';
+import PixelTimeline from '../components/PixelTimeline';
 import Layout from '../layouts/Layout.astro';
 
 const items = [
@@ -37,23 +38,27 @@ const items = [
 ---
 
 <Layout>
-  <div class="relative min-h-screen bg-[#f5f5f7]">
+  <div class="relative min-h-screen bg-[#0F0F23] overflow-hidden selection:bg-[#F43F5E] selection:text-white">
+    {/* Background Grid */}
+    <div class="absolute inset-0 bg-[linear-gradient(rgba(124,58,237,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(124,58,237,0.1)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_80%_80%_at_50%_20%,black_40%,transparent_100%)] pointer-events-none z-0"></div>
+    
     <CardNav
       client:load
       logoText="SanXiaoXing"
-      logoFont="'Emblema One', serif"
+      logoFont="'Emblema One', 'Russo One', sans-serif"
       logoAlt="SanXiaoXing Logo"
       items={items}
-      baseColor="#fff"
-      menuColor="#000"
-      buttonBgColor="#111"
+      baseColor="#0F0F23"
+      menuColor="#A78BFA"
+      buttonBgColor="#7C3AED"
       buttonTextColor="#fff"
-      ease="circ.out"
+      ease="power3.out"
+      className="border-2 border-[#7C3AED] shadow-[4px_4px_0px_#7C3AED]"
     />
     
-    <div class="pt-32 px-4">
-      <section class="mx-auto max-w-5xl py-12 md:py-20 ">
-        <h1 class="text-balance text-center text-4xl font-semibold tracking-tight text-slate-900 md:text-6xl">
+    <div class="pt-32 px-4 relative z-10">
+      <section class="mx-auto max-w-full py-12 md:py-20 text-center">
+        <h1 class="text-balance text-4xl font-bold tracking-tight text-[#E2E8F0] md:text-7xl font-['Chakra_Petch'] uppercase">
           记录我的
           <span class="ml-2 inline-flex h-[1.15em] overflow-hidden align-baseline">
             <RotatingText
@@ -62,7 +67,7 @@ const items = [
               rotationInterval={2200}
               staggerDuration={0.03}
               staggerFrom="first"
-              mainClassName="inline-flex font-semibold text-indigo-600"
+              mainClassName="inline-flex font-bold text-[#F43F5E] drop-shadow-[2px_2px_0px_rgba(124,58,237,0.8)]"
               splitLevelClassName="inline-flex"
               elementLevelClassName="will-change-transform"
             />
@@ -70,6 +75,8 @@ const items = [
         </h1>
 
     <TimeProgress client:load />
+
+    <PixelTimeline client:load />
 	
   </div>
 </Layout>

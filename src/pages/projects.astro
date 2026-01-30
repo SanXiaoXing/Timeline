@@ -1,0 +1,59 @@
+---
+import Layout from '../layouts/Layout.astro';
+import CardNav from '../components/CardNav';
+import ProjectQuestLog from '../components/ProjectQuestLog';
+
+const items = [
+  {
+    label: "Home",
+    bgColor: "#0D0716",
+    textColor: "#fff",
+    links: [
+      { label: "Back to Home", ariaLabel: "Go Home", href: "/" }
+    ]
+  },
+  {
+    label: "Projects",
+    bgColor: "#170D27",
+    textColor: "#fff",
+    links: [
+      { label: "Featured", ariaLabel: "Featured Projects", href: "#" },
+      { label: "Case Studies", ariaLabel: "Project Case Studies", href: "#" }
+    ]
+  },
+  {
+    label: "Contact",
+    bgColor: "#271E37",
+    textColor: "#fff",
+    links: [
+      { label: "Email", ariaLabel: "Email us", href: "#" },
+      { label: "GitHub", ariaLabel: "GitHub Profile", href: "#" }
+    ]
+  }
+];
+---
+
+<Layout>
+  <div class="relative min-h-screen bg-[#0F0F23] overflow-hidden selection:bg-[#F43F5E] selection:text-white">
+    {/* Background Grid */}
+    <div class="absolute inset-0 bg-[linear-gradient(rgba(124,58,237,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(124,58,237,0.1)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_80%_80%_at_50%_20%,black_40%,transparent_100%)] pointer-events-none z-0"></div>
+
+    <div class="pt-32 px-4 relative z-10 max-w-7xl mx-auto">
+      {/* Header Section */}
+      <section class="mb-16 text-center">
+        <h1 class="text-3xl md:text-5xl font-bold text-[#E2E8F0] font-['Press_Start_2P'] mb-6 drop-shadow-[4px_4px_0px_#7C3AED]">
+          PROJECT LOGS
+        </h1>
+        <p class="text-[#94A3B8] font-['VT323'] text-xl md:text-2xl max-w-2xl mx-auto leading-relaxed">
+          Tracking the development progress and milestones of my digital creations.
+          <br/>
+          <span class="text-[#F43F5E]">> System Status: ONLINE</span>
+        </p>
+      </section>
+
+      {/* Main Timeline */}
+      <ProjectQuestLog client:load />
+      
+    </div>
+  </div>
+</Layout>

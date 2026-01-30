@@ -29,7 +29,7 @@ export const RollingNumber = ({ value, decimals = 1, unit = '%', className }: Ro
 
         // 数字字符做滚动动画
         return (
-          <span key={index} className="relative inline-flex flex-col items-center justify-center h-[1.1em] tabular-nums">
+          <span key={index} className="relative inline-flex flex-col items-center justify-center h-[1.4em] tabular-nums">
             <AnimatePresence mode="popLayout" initial={false}>
               <motion.span
                 key={`${index}-${char}`}
