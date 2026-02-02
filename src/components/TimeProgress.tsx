@@ -250,16 +250,16 @@ const TimeProgress: React.FC<{ className?: string }> = ({ className }) => {
           >
             <div className="flex items-start justify-between gap-6">
               <div>
-                <div className="text-lg font-bold text-[#A78BFA] tracking-wider uppercase font-['Press_Start_2P'] leading-loose">今天已过去</div>
-                <div className="mt-4 text-3xl font-bold tracking-tight text-[#E2E8F0] tabular-nums md:text-4xl drop-shadow-[2px_2px_0px_#7C3AED] font-['Press_Start_2P']">
-                  <RollingNumber value={progress.day * 100} />
+                <div className="text-lg font-bold text-[#A78BFA] tracking-wider uppercase leading-loose">今天已过去</div>
+                <div className="mt-4 text-3xl font-bold tracking-tight text-[#E2E8F0] tabular-nums md:text-4xl drop-shadow-[2px_2px_0px_#7C3AED]">
+                  <RollingNumber value={progress.day * 100} className="font-['PressStart2P']" />
                 </div>
-                <div className="mt-4 text-sm text-[#94A3B8] font-['Press_Start_2P'] leading-loose">以当前时间为准</div>
+                <div className="mt-4 text-sm text-[#94A3B8] leading-loose">以当前时间为准</div>
               </div>
               <div className="border-2 border-[#7C3AED] bg-[#1A1A2E] px-4 py-3 text-right shadow-[4px_4px_0px_#7C3AED]">
-                <div className="text-xs text-[#A78BFA] uppercase tracking-wider font-['Press_Start_2P'] mb-2">当前时间</div>
-                <div className="mt-1 text-base font-bold text-[#E2E8F0] tabular-nums font-['Press_Start_2P']">
-                  <RollingNumber value={header.timeText} unit="" />
+                <div className="text-xs text-[#A78BFA] uppercase tracking-wider mb-2">当前时间</div>
+                <div className="mt-1 text-base font-bold text-[#E2E8F0] tabular-nums">
+                  <RollingNumber value={header.timeText} unit="" className="font-['PressStart2P']" />
                 </div>
               </div>
             </div>
@@ -277,15 +277,15 @@ const TimeProgress: React.FC<{ className?: string }> = ({ className }) => {
               </div>
               <div className="mt-6 grid grid-cols-2 gap-6 text-sm text-[#94A3B8]">
                 <div className="border-2 border-[#7C3AED] bg-[#1A1A2E] p-5 shadow-[4px_4px_0px_#7C3AED] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_#7C3AED] transition-all duration-200">
-                  <div className="text-xs text-[#A78BFA] uppercase tracking-wider font-['Press_Start_2P'] mb-3">本年第</div>
-                  <div className="mt-2 text-lg font-bold tracking-tight text-[#E2E8F0] tabular-nums font-['Press_Start_2P']">
-                    {header.weekNo} <span className="text-xs">周</span>
+                  <div className="text-xs text-[#A78BFA] uppercase tracking-wider mb-3">本年第</div>
+                  <div className="mt-2 text-lg font-bold tracking-tight text-[#E2E8F0] tabular-nums">
+                    <span className="font-['PressStart2P']">{header.weekNo}</span> <span className="text-xs">周</span>
                   </div>
                 </div>
                 <div className="border-2 border-[#7C3AED] bg-[#1A1A2E] p-5 shadow-[4px_4px_0px_#7C3AED] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_#7C3AED] transition-all duration-200">
-                  <div className="text-xs text-[#A78BFA] uppercase tracking-wider font-['Press_Start_2P'] mb-3">本周进度</div>
-                  <div className="mt-2 text-lg font-bold tracking-tight text-[#E2E8F0] tabular-nums font-['Press_Start_2P']">
-                    <RollingNumber value={progress.week * 100} />
+                  <div className="text-xs text-[#A78BFA] uppercase tracking-wider mb-3">本周进度</div>
+                  <div className="mt-2 text-lg font-bold tracking-tight text-[#E2E8F0] tabular-nums">
+                    <RollingNumber value={progress.week * 100} className="font-['PressStart2P']" />
                   </div>
                   <div className="mt-4 h-4 w-full overflow-hidden bg-[#1E1E3F] border-2 border-[#7C3AED]">
                     <div
@@ -308,17 +308,21 @@ const TimeProgress: React.FC<{ className?: string }> = ({ className }) => {
           >
             <div className="flex items-start justify-between gap-6">
               <div>
-                <div className="text-lg font-bold text-[#A78BFA] tracking-wider uppercase font-['Press_Start_2P'] leading-loose">本月已过去</div>
-                <div className="mt-4 text-3xl font-bold tracking-tight text-[#E2E8F0] tabular-nums md:text-4xl drop-shadow-[2px_2px_0px_#7C3AED] font-['Press_Start_2P']">
-                  <RollingNumber value={progress.month * 100} />
+                <div className="text-lg font-bold text-[#A78BFA] tracking-wider uppercase leading-loose">本月已过去</div>
+                <div className="mt-4 text-3xl font-bold tracking-tight text-[#E2E8F0] tabular-nums md:text-4xl drop-shadow-[2px_2px_0px_#7C3AED]">
+                  <RollingNumber value={progress.month * 100} className="font-['PressStart2P']" />
                 </div>
-                <div className="mt-4 text-sm text-[#94A3B8] font-['Press_Start_2P'] leading-loose">
-                  {header.year}年{header.monthIndex + 1}月{header.dayOfMonth}日
+                <div className="mt-4 text-sm text-[#94A3B8] leading-loose">
+                  <span className="font-['PressStart2P']">{header.year}</span>年
+                  <span className="font-['PressStart2P']">{header.monthIndex + 1}</span>月
+                  <span className="font-['PressStart2P']">{header.dayOfMonth}</span>日
                 </div>
               </div>
               <div className="border-2 border-[#7C3AED] bg-[#1A1A2E] px-4 py-3 text-right shadow-[4px_4px_0px_#7C3AED]">
-                <div className="text-xs text-[#A78BFA] uppercase tracking-wider font-['Press_Start_2P'] mb-2">日历</div>
-                <div className="mt-1 text-base font-bold text-[#E2E8F0] font-['Press_Start_2P']">{header.monthIndex + 1} 月</div>
+                <div className="text-xs text-[#A78BFA] uppercase tracking-wider mb-2">日历</div>
+                <div className="mt-1 text-base font-bold text-[#E2E8F0]">
+                  <span className="font-['PressStart2P']">{header.monthIndex + 1}</span> 月
+                </div>
               </div>
             </div>
 
@@ -336,7 +340,7 @@ const TimeProgress: React.FC<{ className?: string }> = ({ className }) => {
             </div>
 
             <div className="mt-8 border-2 border-[#7C3AED] bg-[#1A1A2E] p-5 md:p-6 shadow-[4px_4px_0px_#7C3AED]">
-              <div className="grid grid-cols-7 gap-2 text-center text-xs text-[#A78BFA] font-bold font-['Press_Start_2P']">
+              <div className="grid grid-cols-7 gap-2 text-center text-xs text-[#A78BFA] font-bold">
                 {['日', '一', '二', '三', '四', '五', '六'].map(d => (
                   <div key={d} className="py-1">
                     {d}
@@ -349,13 +353,13 @@ const TimeProgress: React.FC<{ className?: string }> = ({ className }) => {
                     {cell.day ? (
                       <div
                         className={cn(
-                          'flex h-8 w-8 items-center justify-center border-2 text-[#E2E8F0] tabular-nums font-["Press_Start_2P"] transition-all duration-200 text-xs',
+                          'flex h-8 w-8 items-center justify-center border-2 text-[#E2E8F0] tabular-nums transition-all duration-200 text-xs',
                           cell.isToday 
                             ? 'bg-[#F43F5E] text-white border-[#F43F5E] shadow-[2px_2px_0px_rgba(0,0,0,0.5)]' 
                             : 'border-transparent hover:border-[#7C3AED] hover:bg-[#7C3AED]/20 cursor-pointer'
                         )}
                       >
-                        {cell.day}
+                        <span className="font-['PressStart2P']">{cell.day}</span>
                       </div>
                     ) : (
                       <div className="h-8 w-8" />
@@ -374,15 +378,17 @@ const TimeProgress: React.FC<{ className?: string }> = ({ className }) => {
           >
             <div className="flex items-start justify-between gap-6">
               <div>
-                <div className="text-lg font-bold text-[#A78BFA] tracking-wider uppercase font-['Press_Start_2P'] leading-loose">今年已过去</div>
-                <div className="mt-4 text-3xl font-bold tracking-tight text-[#E2E8F0] tabular-nums md:text-4xl drop-shadow-[2px_2px_0px_#7C3AED] font-['Press_Start_2P']">
-                  <RollingNumber value={progress.year * 100} />
+                <div className="text-lg font-bold text-[#A78BFA] tracking-wider uppercase leading-loose">今年已过去</div>
+                <div className="mt-4 text-3xl font-bold tracking-tight text-[#E2E8F0] tabular-nums md:text-4xl drop-shadow-[2px_2px_0px_#7C3AED]">
+                  <RollingNumber value={progress.year * 100} className="font-['PressStart2P']" />
                 </div>
-                <div className="mt-4 text-sm text-[#94A3B8] font-['Press_Start_2P'] leading-loose">按自然年累计进度</div>
+                <div className="mt-4 text-sm text-[#94A3B8] leading-loose">按自然年累计进度</div>
               </div>
               <div className="border-2 border-[#7C3AED] bg-[#1A1A2E] px-4 py-3 text-right shadow-[4px_4px_0px_#7C3AED]">
-                <div className="text-xs text-[#A78BFA] uppercase tracking-wider font-['Press_Start_2P'] mb-2">年份</div>
-                <div className="mt-1 text-sm font-bold text-[#E2E8F0] tabular-nums font-['Press_Start_2P']">{header.year}</div>
+                <div className="text-xs text-[#A78BFA] uppercase tracking-wider mb-2">年份</div>
+                <div className="mt-1 text-sm font-bold text-[#E2E8F0] tabular-nums">
+                  <span className="font-['PressStart2P']">{header.year}</span>
+                </div>
               </div>
             </div>
 
@@ -399,9 +405,9 @@ const TimeProgress: React.FC<{ className?: string }> = ({ className }) => {
               </div>
               <div className="mt-6 grid gap-6 md:grid-cols-2">
                 <div className="border-2 border-[#7C3AED] bg-[#1A1A2E] p-5 shadow-[4px_4px_0px_#7C3AED] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_#7C3AED] transition-all duration-200">
-                  <div className="text-xs text-[#A78BFA] uppercase tracking-wider font-['Press_Start_2P'] mb-3">月份进度</div>
-                  <div className="mt-2 text-lg font-bold tracking-tight text-[#E2E8F0] tabular-nums font-['Press_Start_2P']">
-                    {(progress.month * 100).toFixed(1)}%
+                  <div className="text-xs text-[#A78BFA] uppercase tracking-wider mb-3">月份进度</div>
+                  <div className="mt-2 text-lg font-bold tracking-tight text-[#E2E8F0] tabular-nums">
+                    <span className="font-['PressStart2P']">{(progress.month * 100).toFixed(1)}%</span>
                   </div>
                   <div className="mt-4 h-4 w-full overflow-hidden bg-[#1E1E3F] border-2 border-[#7C3AED]">
                     <div
@@ -413,9 +419,9 @@ const TimeProgress: React.FC<{ className?: string }> = ({ className }) => {
                   </div>
                 </div>
                 <div className="border-2 border-[#7C3AED] bg-[#1A1A2E] p-5 shadow-[4px_4px_0px_#7C3AED] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_#7C3AED] transition-all duration-200">
-                  <div className="text-xs text-[#A78BFA] uppercase tracking-wider font-['Press_Start_2P'] mb-3">今日进度</div>
-                  <div className="mt-2 text-lg font-bold tracking-tight text-[#E2E8F0] tabular-nums font-['Press_Start_2P']">
-                    {(progress.day * 100).toFixed(1)}%
+                  <div className="text-xs text-[#A78BFA] uppercase tracking-wider mb-3">今日进度</div>
+                  <div className="mt-2 text-lg font-bold tracking-tight text-[#E2E8F0] tabular-nums">
+                    <span className="font-['PressStart2P']">{(progress.day * 100).toFixed(1)}%</span>
                   </div>
                   <div className="mt-4 h-4 w-full overflow-hidden bg-[#1E1E3F] border-2 border-[#7C3AED]">
                     <div

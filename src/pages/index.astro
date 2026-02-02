@@ -2,17 +2,17 @@
 import CardNav from '../components/CardNav';
 import RotatingText from '../components/RotatingText';
 import TimeProgress from '../components/TimeProgress';
+import AchievementsCarousel from '../components/AchievementsCarousel';
 import PixelTimeline from '../components/PixelTimeline';
 import Layout from '../layouts/Layout.astro';
 
 const items = [
   {
-    label: "About",
+    label: "Achievements",
     bgColor: "#0D0716",
     textColor: "#fff",
     links: [
-      { label: "Company", ariaLabel: "About Company", href: "#" },
-      { label: "Careers", ariaLabel: "About Careers", href: "#" }
+      { label: "Trophy Room", ariaLabel: "Go to Achievements", href: "/achievements" }
     ]
   },
   {
@@ -20,8 +20,8 @@ const items = [
     bgColor: "#170D27",
     textColor: "#fff",
     links: [
-      { label: "Featured", ariaLabel: "Featured Projects", href: "#" },
-      { label: "Case Studies", ariaLabel: "Project Case Studies", href: "#" }
+      { label: "Project Logs", ariaLabel: "Go to Projects", href: "/projects" },
+      { label: "Dungeon Progress", ariaLabel: "Go to Project Progress", href: "/projects/timeline" }
     ]
   },
   {
@@ -75,6 +75,8 @@ const items = [
         </h1>
 
     <TimeProgress client:load />
+
+    <AchievementsCarousel client:load />
 
     <PixelTimeline client:load />
 	

@@ -1,0 +1,29 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ProjectProgressHUD from '../../components/ProjectProgressHUD';
+import { projects } from '../../contents/projects';
+
+export function getStaticPaths() {
+  return projects.map(project => ({
+    params: { slug: project.slug },
+    props: { project }
+  }));
+}
+
+const { project } = Astro.props;
+---
+
+<Layout>
+  <div class="relative min-h-screen bg-[#0F0F23] overflow-hidden selection:bg-[#F43F5E] selection:text-white">
+    <div class="absolute inset-0 bg-[linear-gradient(rgba(124,58,237,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(124,58,237,0.1)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_80%_80%_at_50%_20%,black_40%,transparent_100%)] pointer-events-none z-0"></div>
+    <div class="absolute inset-0 pointer-events-none z-0 opacity-[0.10]">
+      <div class="absolute -top-40 left-1/2 h-[560px] w-[560px] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,rgba(244,63,94,0.55)_0%,rgba(244,63,94,0)_62%)] blur-2xl"></div>
+      <div class="absolute -bottom-48 left-12 h-[560px] w-[560px] rounded-full bg-[radial-gradient(circle,rgba(124,58,237,0.55)_0%,rgba(124,58,237,0)_62%)] blur-2xl"></div>
+    </div>
+
+    <div class="relative z-10">
+      <ProjectProgressHUD client:load project={project} />
+    </div>
+  </div>
+</Layout>
+

@@ -12,7 +12,6 @@ import Layout from '../layouts/Layout.astro';
     <p class="output">Good luck.</p>
   </div>
   <style is:global>
-    @import 'https://fonts.googleapis.com/css?family=Inconsolata';
     html { min-height: 100%; }
     body {
       box-sizing: border-box;
@@ -21,10 +20,15 @@ import Layout from '../layouts/Layout.astro';
       background-image: radial-gradient(#3a3c4e, #1e1f29), url("https://media.giphy.com/media/oEI9uBYSzLpBK/giphy.gif");
       background-repeat: no-repeat;
       background-size: cover;
-      font-family: "Inconsolata", Helvetica, sans-serif;
+      font-family: Helvetica, sans-serif;
       font-size: 1.5rem;
       color: #f8f8f2;
       text-shadow: none;
+    }
+    .terminal h1,
+    .output,
+    .errorcode {
+      font-family: "PressStart2P", Helvetica, sans-serif;
     }
     .noise {
       pointer-events: none;
@@ -85,7 +89,13 @@ import Layout from '../layouts/Layout.astro';
     .output a:hover { color: #bd93f9; text-shadow: 0 0 6px rgba(189, 147, 249, 0.8), 0 0 12px rgba(189, 147, 249, 0.6), 0 0 18px rgba(189, 147, 249, 0.4); }
     .output a::before { content: "["; }
     .output a::after { content: "]"; }
-    .terminal h1 { color: #f8f8f2; text-shadow: 0 0 8px rgba(189, 147, 249, 0.8), 0 0 16px rgba(189, 147, 249, 0.6), 0 0 24px rgba(189, 147, 249, 0.4); }
+    .terminal h1 {
+      margin: 0 0 2.5rem 0;
+      font-size: clamp(3rem, 6vw, 5rem);
+      line-height: 1.05;
+      color: #f8f8f2;
+      text-shadow: 0 0 8px rgba(189, 147, 249, 0.8), 0 0 16px rgba(189, 147, 249, 0.6), 0 0 24px rgba(189, 147, 249, 0.4);
+    }
     .errorcode { color: #f8f8f2; text-shadow: 0 0 10px rgba(189, 147, 249, 0.9), 0 0 20px rgba(189, 147, 249, 0.6), 0 0 30px rgba(189, 147, 249, 0.4); }
   </style>
   <script>

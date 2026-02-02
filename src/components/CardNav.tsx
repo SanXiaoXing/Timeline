@@ -224,7 +224,7 @@ const CardNav: React.FC<CardNavProps> = ({
               ref={setCardRef(idx)}
               style={{ backgroundColor: item.bgColor, color: item.textColor }}
             >
-              <div className="nav-card-label font-normal tracking-[-0.5px] text-[20px] md:text-[24px]">
+              <div className="nav-card-label font-normal tracking-[-0.5px] text-[20px] md:text-[24px] font-['PressStart2P']">
                 {item.label}
               </div>
               <div className="nav-card-links mt-auto flex flex-col gap-[2px]">
