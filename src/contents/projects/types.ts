@@ -1,3 +1,5 @@
+import type { AchievementCategory } from '../achievements';
+
 export type ProjectStatus = 'in_progress' | 'paused' | 'completed';
 
 export type ProjectMilestone = {
@@ -20,6 +22,7 @@ export type Project = {
   slug: string;
   name: string;
   status: ProjectStatus;
+  achievementTags: AchievementCategory[];
   currentStage: string;
   progressPct: number;
   milestones: ProjectMilestone[];
@@ -31,4 +34,3 @@ export const projectStatusLabel: Record<ProjectStatus, string> = {
   paused: '暂停',
   completed: '已完成'
 };
-

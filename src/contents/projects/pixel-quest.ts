@@ -4,6 +4,7 @@ export const project: Project = {
   slug: 'pixel-quest',
   name: '像素任务板（Pixel Quest Board）',
   status: 'paused',
+  achievementTags: ['skill', 'study'],
   currentStage: '等待下一次迭代：整理任务与性能优化',
   progressPct: 42,
   milestones: [
@@ -52,4 +53,3 @@ export const project: Project = {
     }
   ]
 };
-

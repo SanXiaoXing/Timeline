@@ -8,7 +8,7 @@ import Layout from '../layouts/Layout.astro';
 
 const items = [
   {
-    label: "Achievements",
+    label: "Awards",
     bgColor: "#0D0716",
     textColor: "#fff",
     links: [
@@ -29,9 +29,9 @@ const items = [
     bgColor: "#271E37",
     textColor: "#fff",
     links: [
-      { label: "Email", ariaLabel: "Email us", href: "#" },
-      { label: "Twitter", ariaLabel: "Twitter", href: "#" },
-      { label: "LinkedIn", ariaLabel: "LinkedIn", href: "#" }
+      { label: "Email", ariaLabel: "Email us", href: "mailto:sanxiaoxing@qq.com" },
+      { label: "Github", ariaLabel: "Github", href: "https://github.com/SanXiaoXing" },
+      // { label: "LinkedIn", ariaLabel: "LinkedIn", href: "https://www.linkedin.com/in/sanxiaoxing/" }
     ]
   }
 ];
@@ -78,7 +78,7 @@ const items = [
 
     <AchievementsCarousel client:load />
 
-    <PixelTimeline client:load />
+    <!-- <PixelTimeline client:load /> -->
 	
   </div>
 </Layout>

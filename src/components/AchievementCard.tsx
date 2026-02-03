@@ -35,13 +35,21 @@ const rarityTheme: Record<
 
 export type AchievementCardProps = {
   achievement: Achievement;
+  maskDirection?: 'up' | 'right';
 };
 
-const AchievementCard: React.FC<AchievementCardProps> = ({ achievement }) => {
+const AchievementCard: React.FC<AchievementCardProps> = ({ achievement, maskDirection = 'up' }) => {
   const cardRef = useRef<HTMLDivElement | null>(null);
   const prevUnlockedRef = useRef<boolean>(achievement.unlocked);
+  const prevProgressRef = useRef<number>(achievement.progressPct);
+  const maskTweenRef = useRef<gsap.core.Tween | null>(null);
+  const completeTweenRef = useRef<gsap.core.Timeline | null>(null);
 
   const theme = useMemo(() => rarityTheme[achievement.rarity], [achievement.rarity]);
+  const progressPct = useMemo(() => Math.min(100, Math.max(0, achievement.progressPct)), [achievement.progressPct]);
+  const lockPct = useMemo(() => 100 - progressPct, [progressPct]);
+  const lock = useMemo(() => lockPct / 100, [lockPct]);
+  const isComplete = useMemo(() => progressPct >= 100, [progressPct]);
 
   useEffect(() => {
     const el = cardRef.current;
@@ -76,6 +84,62 @@ const AchievementCard: React.FC<AchievementCardProps> = ({ achievement }) => {
     };
   }, [achievement.unlocked, theme.border, theme.glow]);
 
+  useEffect(() => {
+    const el = cardRef.current;
+    if (!el) return;
+
+    const prev = Math.min(100, Math.max(0, prevProgressRef.current));
+    prevProgressRef.current = progressPct;
+
+    const start = Number(el.style.getPropertyValue('--achv-lock-pct') || String(100 - prev));
+    const target = lockPct;
+    const step = 4;
+
+    if (maskTweenRef.current) maskTweenRef.current.kill();
+    const state = { v: start };
+    maskTweenRef.current = gsap.to(state, {
+      v: target,
+      duration: 0.6,
+      ease: 'power2.out',
+      onUpdate: () => {
+        const snapped = Math.max(0, Math.min(100, Math.round(state.v / step) * step));
+        el.style.setProperty('--achv-lock-pct', String(snapped));
+        el.style.setProperty('--achv-lock', String(snapped / 100));
+      },
+      onComplete: () => {
+        el.style.setProperty('--achv-lock-pct', String(target));
+        el.style.setProperty('--achv-lock', String(lock));
+      }
+    });
+
+    if (prev < 100 && progressPct >= 100) {
+      const flash = el.querySelector('.achv-flash') as HTMLElement | null;
+      if (completeTweenRef.current) completeTweenRef.current.kill();
+      completeTweenRef.current = gsap.timeline();
+      el.classList.add('achv-unlocking');
+      completeTweenRef.current.set(el, { willChange: 'transform, filter, box-shadow' });
+      if (flash) {
+        completeTweenRef.current.fromTo(
+          flash,
+          { opacity: 0 },
+          { opacity: 0.9, duration: 0.08, ease: 'power1.out', yoyo: true, repeat: 1 }
+        );
+      }
+      completeTweenRef.current.to(el, { boxShadow: `0 0 0 2px ${theme.border} inset, 0 0 26px ${theme.glow}`, duration: 0.12 });
+      completeTweenRef.current.to(el, { boxShadow: `0 0 0 2px ${theme.border} inset, 0 0 46px ${theme.glow}`, duration: 0.18, ease: 'power2.out' }, '<');
+      completeTweenRef.current.to(el, { boxShadow: '', duration: 0.12 });
+      completeTweenRef.current.set(el, { willChange: 'auto' });
+      completeTweenRef.current.call(() => {
+        el.classList.remove('achv-unlocking');
+      });
+    }
+
+    return () => {
+      if (maskTweenRef.current) maskTweenRef.current.kill();
+      if (completeTweenRef.current) completeTweenRef.current.kill();
+    };
+  }, [progressPct, lockPct, lock, theme.border, theme.glow]);
+
   return (
     <div
       ref={cardRef}
@@ -84,13 +148,26 @@ const AchievementCard: React.FC<AchievementCardProps> = ({ achievement }) => {
         'group relative overflow-hidden border-2 bg-[#0B0B1A] px-4 py-4 md:px-5 md:py-5 min-h-[208px] md:min-h-[200px]',
         'shadow-[6px_6px_0px_rgba(124,58,237,0.55)] transition-transform duration-200',
         'hover:-translate-y-[2px] hover:shadow-[8px_8px_0px_rgba(244,63,94,0.55)] hover:scale-[1.01]',
-        achievement.unlocked ? '' : 'grayscale brightness-75',
       ].join(' ')}
       style={{
-        borderColor: achievement.unlocked ? theme.border : 'rgba(148,163,184,0.35)'
+        borderColor: achievement.unlocked ? theme.border : 'rgba(148,163,184,0.35)',
+        ['--achv-lock' as any]: lock,
+        ['--achv-lock-pct' as any]: lockPct
       }}
       aria-label={achievement.unlocked ? `成就：${achievement.name}` : `未解锁成就：${achievement.name}`}
     >
+      <div
+        className={[
+          'achv-mask pointer-events-none absolute',
+          maskDirection === 'right' ? 'left-0 top-0 bottom-0' : 'bottom-0 left-0 right-0',
+          isComplete ? 'opacity-0' : 'opacity-100'
+        ].join(' ')}
+        data-dir={maskDirection}
+        aria-hidden="true"
+      >
+        <div className="achv-mask-edge" aria-hidden="true" />
+      </div>
+      <div className="achv-flash pointer-events-none absolute inset-0 opacity-0" aria-hidden="true" />
       <div className="pointer-events-none absolute inset-0 opacity-[0.14]">
         <div
           className="absolute -left-16 top-6 h-24 w-40 rotate-[-14deg]"
@@ -176,6 +253,137 @@ const AchievementCard: React.FC<AchievementCardProps> = ({ achievement }) => {
       <span className="achv-burst pointer-events-none absolute inset-0 opacity-0" aria-hidden="true" />
 
       <style>{`
+        .achv-mask {
+          opacity: calc((var(--achv-lock-pct) / 100) * 0.96);
+          background:
+            linear-gradient(180deg, rgba(2,6,23,0.08) 0%, rgba(2,6,23,0.62) 22%, rgba(2,6,23,0.92) 100%),
+            repeating-linear-gradient(180deg, rgba(148,163,184,0.09) 0 1px, rgba(2,6,23,0) 1px 4px),
+            repeating-linear-gradient(90deg, rgba(148,163,184,0.03) 0 6px, rgba(2,6,23,0) 6px 12px),
+            radial-gradient(ellipse at 50% 0%, rgba(148,163,184,0.20), transparent 62%);
+          transition: opacity 240ms ease;
+          animation: achvMaskFlicker 1100ms steps(8) infinite;
+          image-rendering: pixelated;
+          overflow: hidden;
+          box-shadow: 0 -1px 0 rgba(148,163,184,0.22) inset;
+        }
+        .achv-mask[data-dir="up"] {
+          height: calc(var(--achv-lock-pct) * 1%);
+        }
+        .achv-mask[data-dir="right"] {
+          width: calc(var(--achv-lock-pct) * 1%);
+        }
+        .group:hover .achv-mask {
+          opacity: calc((var(--achv-lock-pct) / 100) * 0.86);
+        }
+        @supports ((backdrop-filter: grayscale(1))) or (-webkit-backdrop-filter: grayscale(1)) {
+          .achv-mask {
+            backdrop-filter: grayscale(1) brightness(0.78);
+            -webkit-backdrop-filter: grayscale(1) brightness(0.78);
+          }
+        }
+        .achv-flash {
+          background: linear-gradient(180deg, rgba(255,255,255,0.88), rgba(255,255,255,0.05));
+          mix-blend-mode: screen;
+          filter: blur(0.2px);
+        }
+        .achv-mask-edge {
+          position: absolute;
+          opacity: 0.9;
+          filter: blur(0.15px);
+        }
+        .achv-mask[data-dir="up"] .achv-mask-edge {
+          left: 0;
+          right: 0;
+          top: -10px;
+          height: 14px;
+          background:
+            repeating-linear-gradient(90deg, rgba(15,23,42,0.96) 0 7px, rgba(15,23,42,0.46) 7px 10px),
+            linear-gradient(180deg, rgba(148,163,184,0.35), rgba(2,6,23,0));
+          mask-image: repeating-linear-gradient(90deg, #000 0 9px, transparent 9px 12px);
+          -webkit-mask-image: repeating-linear-gradient(90deg, #000 0 9px, transparent 9px 12px);
+        }
+        .achv-mask[data-dir="right"] .achv-mask-edge {
+          top: 0;
+          bottom: 0;
+          right: -10px;
+          width: 14px;
+          background:
+            repeating-linear-gradient(180deg, rgba(15,23,42,0.96) 0 7px, rgba(15,23,42,0.46) 7px 10px),
+            linear-gradient(90deg, rgba(148,163,184,0.35), rgba(2,6,23,0));
+          mask-image: repeating-linear-gradient(180deg, #000 0 9px, transparent 9px 12px);
+          -webkit-mask-image: repeating-linear-gradient(180deg, #000 0 9px, transparent 9px 12px);
+        }
+        .achv-mask::before,
+        .achv-mask::after {
+          content: '';
+          position: absolute;
+          inset: -22%;
+          background-repeat: no-repeat;
+          pointer-events: none;
+          will-change: transform, opacity, filter;
+        }
+        .achv-mask::before {
+          opacity: 0.72;
+          filter: blur(0.35px);
+          background-image:
+            radial-gradient(circle at 12% 18%, rgba(148,163,184,0.55) 0 1px, transparent 2px),
+            radial-gradient(circle at 28% 44%, rgba(148,163,184,0.45) 0 1px, transparent 2px),
+            radial-gradient(circle at 46% 22%, rgba(148,163,184,0.52) 0 1px, transparent 2px),
+            radial-gradient(circle at 62% 36%, rgba(148,163,184,0.42) 0 1px, transparent 2px),
+            radial-gradient(circle at 74% 18%, rgba(148,163,184,0.50) 0 1px, transparent 2px),
+            radial-gradient(circle at 18% 78%, rgba(148,163,184,0.40) 0 1px, transparent 2px),
+            radial-gradient(circle at 52% 72%, rgba(148,163,184,0.46) 0 1px, transparent 2px),
+            radial-gradient(circle at 82% 70%, rgba(148,163,184,0.48) 0 1px, transparent 2px),
+            radial-gradient(circle at 34% 62%, rgba(148,163,184,0.44) 0 1px, transparent 2px),
+            radial-gradient(circle at 92% 44%, rgba(148,163,184,0.40) 0 1px, transparent 2px);
+          animation: achvDustA 1400ms ease-out infinite;
+        }
+        .achv-mask::after {
+          opacity: 0.55;
+          filter: blur(0.6px);
+          mix-blend-mode: screen;
+          background-image:
+            radial-gradient(circle at 22% 30%, rgba(167,139,250,0.25) 0 1px, transparent 3px),
+            radial-gradient(circle at 48% 14%, rgba(56,189,248,0.18) 0 1px, transparent 3px),
+            radial-gradient(circle at 70% 30%, rgba(245,158,11,0.16) 0 1px, transparent 3px),
+            radial-gradient(circle at 62% 70%, rgba(244,63,94,0.14) 0 1px, transparent 3px),
+            radial-gradient(circle at 38% 78%, rgba(34,197,94,0.14) 0 1px, transparent 3px);
+          animation: achvDustB 2000ms ease-out infinite;
+        }
+        @keyframes achvMaskFlicker {
+          0% { opacity: calc((var(--achv-lock-pct) / 100) * 0.82); transform: translate(0px, 0px); }
+          25% { opacity: calc((var(--achv-lock-pct) / 100) * 0.98); transform: translate(0px, -1px); }
+          50% { opacity: calc((var(--achv-lock-pct) / 100) * 0.86); transform: translate(1px, 0px); }
+          100% { opacity: calc((var(--achv-lock-pct) / 100) * 0.92); transform: translate(0px, 0px); }
+        }
+        @keyframes achvDustA {
+          0% {
+            transform: translate(0px, 0px) scale(1);
+            opacity: 0.46;
+          }
+          45% {
+            transform: translate(calc(var(--achv-lock) * -14px), calc(var(--achv-lock) * 10px)) scale(1.08);
+            opacity: 0.76;
+          }
+          100% {
+            transform: translate(calc(var(--achv-lock) * -26px), calc(var(--achv-lock) * 18px)) scale(1.16);
+            opacity: 0.02;
+          }
+        }
+        @keyframes achvDustB {
+          0% {
+            transform: translate(0px, 0px) scale(1);
+            opacity: 0.12;
+          }
+          35% {
+            transform: translate(calc(var(--achv-lock) * 10px), calc(var(--achv-lock) * -8px)) scale(1.06);
+            opacity: 0.38;
+          }
+          100% {
+            transform: translate(calc(var(--achv-lock) * 22px), calc(var(--achv-lock) * -16px)) scale(1.14);
+            opacity: 0;
+          }
+        }
         .achv-unlocking .achv-burst {
           opacity: 1;
           animation: achvBurst 820ms ease-out forwards;

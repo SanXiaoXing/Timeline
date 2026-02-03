@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import type { Project, ProjectMilestone, ProjectTimelineItem, ProjectStatus } from '../contents/projects';
 import { projectStatusLabel } from '../contents/projects';
+import { achievementCategoryLabels } from '../contents/achievements';
 import ProjectProgressBar from './ProjectProgressBar';
 import ProjectProgressTimeline from './ProjectProgressTimeline';
 
@@ -63,6 +64,13 @@ const ProjectProgressHUD: React.FC<ProjectProgressHUDProps> = ({ project }) => {
     [sortedMilestones, actualPct]
   );
 
+  const stepsBorderWidth = useMemo(() => {
+    const ratio = sortedMilestones.length > 0 ? unlockedCount / sortedMilestones.length : 0;
+    return Math.round(clamp(2 + ratio * 4, 2, 6));
+  }, [sortedMilestones.length, unlockedCount]);
+
+  const currentBorderWidth = useMemo(() => Math.round(clamp(2 + (actualPct / 100) * 4, 2, 6)), [actualPct]);
+
   const selectedMilestone = useMemo(
     () => getMilestoneById(sortedMilestones, selectedMilestoneId),
     [sortedMilestones, selectedMilestoneId]
@@ -97,9 +105,24 @@ const ProjectProgressHUD: React.FC<ProjectProgressHUDProps> = ({ project }) => {
               >
                 <span className="font-['PressStart2P'] text-[12px]">{projectStatusLabel[project.status]}</span>
               </span>
+              {project.achievementTags.map(tag => (
+                <span
+                  key={tag}
+                  className="inline-flex items-center gap-1 border-2 border-[#334155] bg-black/20 px-3 py-2 shadow-[4px_4px_0px_rgba(51,65,85,0.75)]"
+                >
+                  <span className="font-['PressStart2P'] text-[11px] text-[#A78BFA]">TAG</span>
+                  <span className="text-[12px] text-[#94A3B8]">{achievementCategoryLabels[tag]}</span>
+                </span>
+              ))}
               <span className="border-2 border-[#334155] bg-black/20 px-3 py-2 text-[#94A3B8] shadow-[4px_4px_0px_rgba(51,65,85,0.75)]">
                 当前剧情：<span className="text-[#E2E8F0]">{project.currentStage}</span>
               </span>
+              <a
+                href="/"
+                className="border-2 border-[#334155] bg-black/10 px-3 py-2 text-[#94A3B8] shadow-[4px_4px_0px_rgba(51,65,85,0.65)] transition-transform duration-150 hover:-translate-y-[1px]"
+              >
+                返回主页
+              </a>
               <a
                 href="/projects"
                 className="border-2 border-[#334155] bg-black/10 px-3 py-2 text-[#94A3B8] shadow-[4px_4px_0px_rgba(51,65,85,0.65)] transition-transform duration-150 hover:-translate-y-[1px]"
@@ -110,13 +133,19 @@ const ProjectProgressHUD: React.FC<ProjectProgressHUDProps> = ({ project }) => {
           </div>
 
           <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
-            <div className="border-2 border-[#334155] bg-black/20 p-4 shadow-[4px_4px_0px_rgba(51,65,85,0.75)]">
-              <div className="font-['PressStart2P'] text-[11px] text-[#94A3B8]">MILESTONES</div>
+            <div
+              className="border border-[#334155] bg-black/20 p-4 shadow-[4px_4px_0px_rgba(51,65,85,0.75)]"
+              style={{ borderWidth: `${stepsBorderWidth}px` }}
+            >
+              <div className="font-['PressStart2P'] text-[11px] text-[#94A3B8]">STEPS</div>
               <div className="mt-2 text-2xl font-bold text-[#E2E8F0] tabular-nums font-['PressStart2P']">
                 {unlockedCount}/{sortedMilestones.length}
               </div>
             </div>
-            <div className="border-2 border-[#334155] bg-black/20 p-4 shadow-[4px_4px_0px_rgba(51,65,85,0.75)]">
+            <div
+              className="border border-[#334155] bg-black/20 p-4 shadow-[4px_4px_0px_rgba(51,65,85,0.75)]"
+              style={{ borderWidth: `${currentBorderWidth}px` }}
+            >
               <div className="font-['PressStart2P'] text-[11px] text-[#94A3B8]">CURRENT</div>
               <div className="mt-2 text-2xl font-bold text-[#E2E8F0] tabular-nums font-['PressStart2P']">
                 {actualPct}%
@@ -233,4 +262,3 @@ const ProjectProgressHUD: React.FC<ProjectProgressHUDProps> = ({ project }) => {
 };
 
 export default ProjectProgressHUD;
-

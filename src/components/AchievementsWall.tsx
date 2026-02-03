@@ -32,7 +32,7 @@ const AchievementsWall: React.FC = () => {
 
   const filtered = useMemo(() => {
     const byCategory =
-      activeCategory === 'all' ? achievements : achievements.filter(a => a.category === activeCategory);
+      activeCategory === 'all' ? achievements : achievements.filter(a => a.category.includes(activeCategory));
     if (statusFilter === 'all') return byCategory;
     if (statusFilter === 'unlocked') return byCategory.filter(a => a.unlocked);
     return byCategory.filter(a => !a.unlocked);
