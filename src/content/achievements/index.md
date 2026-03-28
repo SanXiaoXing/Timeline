@@ -65,6 +65,24 @@ list:
     rarity: 'legendary'
     progressPct: 6
     unlocked: false
+
+  - id: 'study-02'
+    icon: '📖'
+	name: '丰富读书'
+	description: '完整阅读一本自己喜欢的书'
+    category: ['study', 'life']
+    rarity: 'legendary'
+    progressPct: 10
+    unlocked: false
+
+  - id: 'study-03'
+    icon: '✍️'
+	name: '书法练字'
+	description: '书法练字，是自己变得更加平和'
+    category: ['mindset', 'life']
+    rarity: 'legendary'
+    progressPct: 20
+    unlocked: false
 ---
 
 这里是成就系统的总览，所有的成就数据均在此配置，页面会自动拉取展示。
