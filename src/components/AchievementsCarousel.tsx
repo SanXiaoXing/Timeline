@@ -1,9 +1,9 @@
 import React, { useLayoutEffect, useMemo, useRef } from 'react';
 import { gsap } from 'gsap';
-import { achievements } from '../contents/achievements';
+import type { Achievement } from '../contents/achievements';
 import AchievementCard from './AchievementCard';
 
-const AchievementsCarousel: React.FC = () => {
+const AchievementsCarousel: React.FC<{ initialAchievements: Achievement[] }> = ({ initialAchievements }) => {
   const viewportRef = useRef<HTMLDivElement | null>(null);
   const trackRef = useRef<HTMLDivElement | null>(null);
   const firstSetRef = useRef<HTMLDivElement | null>(null);
@@ -14,7 +14,7 @@ const AchievementsCarousel: React.FC = () => {
     wrap: null
   });
 
-  const unlocked = useMemo(() => achievements.filter(a => a.unlocked), []);
+  const unlocked = useMemo(() => initialAchievements.filter(a => a.unlocked), [initialAchievements]);
 
   useLayoutEffect(() => {
     const track = trackRef.current;
@@ -65,28 +65,30 @@ const AchievementsCarousel: React.FC = () => {
   if (unlocked.length === 0) return null;
 
   return (
-    <section className="mx-auto max-w-7xl px-4 py-12 md:py-16">
-      <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+    <section className="mx-auto max-w-7xl px-4 py-16 md:py-24">
+      <div className="mb-12 flex flex-col md:flex-row items-start md:items-end justify-between gap-4">
         <div>
-          <div className="inline-flex items-center gap-2 border-2 border-[#7C3AED] bg-[#0B0B1A] px-3 py-2 shadow-[4px_4px_0px_#7C3AED]">
-            <span className="font-['PressStart2P'] text-[12px] text-[#A78BFA]">UNLOCKED</span>
-            <span className="text-[#94A3B8] text-[12px]">已完成成就</span>
-          </div>
-          <div className="mt-4 text-xl md:text-2xl font-bold text-[#E2E8F0]">
-            <span className="font-['PressStart2P']">Achievement</span> Carousel
-          </div>
+          <h2 className="text-3xl font-bold tracking-tight text-zinc-100 md:text-4xl">
+            Latest <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400">Achievements</span>
+          </h2>
+          <p className="mt-3 text-sm text-zinc-400 md:text-base font-light">
+            Recent milestones and accomplishments.
+          </p>
         </div>
         <a
           href="/achievements"
-          className="inline-flex items-center justify-center border-2 border-[#F43F5E] bg-[#0B0B1A] px-4 py-3 text-[#E2E8F0] shadow-[4px_4px_0px_rgba(244,63,94,0.55)] transition-transform duration-200 hover:-translate-y-[2px]"
+          className="group inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-5 py-2.5 text-sm font-medium text-zinc-300 transition-all duration-300 hover:bg-white/10 hover:text-zinc-100 backdrop-blur-sm"
         >
-          <span className="font-['PressStart2P'] text-[12px]">进入成就页</span>
+          View All
+          <svg className="h-4 w-4 transform transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+          </svg>
         </a>
       </div>
 
       <div
         ref={viewportRef}
-        className="mt-6 relative overflow-hidden border-4 border-[#7C3AED] bg-[#0B0B1A] shadow-[8px_8px_0px_#7C3AED]"
+        className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm"
         onMouseEnter={() => {
           pausedRef.current = true;
         }}

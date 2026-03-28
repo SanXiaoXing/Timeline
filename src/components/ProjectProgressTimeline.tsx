@@ -1,6 +1,6 @@
 import React, { useLayoutEffect, useMemo, useRef } from 'react';
 import { gsap } from 'gsap';
-import type { ProjectMilestone, ProjectTimelineItem } from '../contents/projects';
+import type { ProjectMilestone, ProjectTimelineItem } from '../contents/projects/types';
 
 export type ProjectProgressTimelineProps = {
   actualProgressPct: number;
@@ -44,26 +44,28 @@ const ProjectProgressTimeline: React.FC<ProjectProgressTimelineProps> = ({
   return (
     <div
       ref={rootRef}
-      className="border-4 border-[#334155] bg-[#0B0B1A] shadow-[8px_8px_0px_rgba(51,65,85,0.75)]"
+      className="rounded-2xl border border-white/10 bg-zinc-900/30 backdrop-blur-sm overflow-hidden flex flex-col"
     >
-      <div className="p-6 md:p-8">
+      <div className="p-6 md:p-8 border-b border-white/5 bg-zinc-900/50">
         <div className="flex items-end justify-between gap-6">
           <div>
-            <div className="inline-flex items-center gap-2 border-2 border-[#334155] bg-black/20 px-3 py-2 shadow-[4px_4px_0px_rgba(51,65,85,0.8)]">
-              <span className="font-['PressStart2P'] text-[12px] text-[#94A3B8]">QUEST LOG</span>
-              <span className="text-[#94A3B8] text-[12px]">剧情推进</span>
+            <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-md bg-white/5 border border-white/10 mb-4">
+              <span className="text-[10px] font-semibold text-zinc-400 uppercase tracking-wider">Quest Log</span>
             </div>
-            <div className="mt-4 text-[#E2E8F0] text-xl md:text-2xl font-bold">
-              <span className="font-['PressStart2P']">Timeline</span> / Milestones
+            <div className="text-2xl font-bold text-zinc-100 tracking-tight">
+              Timeline <span className="text-zinc-600 font-light">/ Milestones</span>
             </div>
           </div>
-          <div className="hidden md:block text-right text-[#94A3B8] text-sm">
-            当前进度：<span className="font-['PressStart2P'] text-[#E2E8F0]">{pct}%</span>
+          <div className="hidden md:block text-right">
+            <div className="text-[10px] font-semibold text-zinc-500 uppercase tracking-wider mb-1">Current Progress</div>
+            <div className="text-2xl font-bold text-indigo-400" style={{ fontFamily: "'Emblema One', cursive" }}>{pct}%</div>
           </div>
         </div>
+      </div>
 
-        <div className="mt-7 grid gap-4">
-          {timeline.map(item => {
+      <div className="p-6 md:p-10 flex-1 overflow-y-auto">
+        <div className="relative border-l border-zinc-800/50 ml-32 md:ml-48 space-y-12 pb-8">
+          {timeline.map((item, index) => {
             const milestone = milestoneById.get(item.milestoneId);
             const milestonePct = milestone?.pct ?? 0;
             const unlocked = pct >= milestonePct;
@@ -72,58 +74,82 @@ const ProjectProgressTimeline: React.FC<ProjectProgressTimelineProps> = ({
               <button
                 key={item.id}
                 type="button"
-                className="relative pl-8 text-left"
+                className="relative pl-8 md:pl-12 text-left w-full group outline-none"
                 onMouseEnter={() => onItemEnter(item.milestoneId)}
                 onMouseLeave={onItemLeave}
                 onFocus={() => onItemEnter(item.milestoneId)}
                 onBlur={onItemLeave}
                 onClick={() => onItemSelect(item.milestoneId)}
               >
-                <div className="absolute left-[10px] top-0 bottom-0 w-[2px] bg-[#334155]" />
+                {/* Date on the Left */}
+                <div className="absolute -left-32 md:-left-48 top-0.5 w-28 md:w-44 text-right pr-4 md:pr-10">
+                  <div 
+                    className={`text-sm md:text-lg tracking-tight transition-all duration-300 leading-none whitespace-nowrap ${active ? 'text-indigo-400 scale-110 origin-right' : 'text-zinc-600'}`}
+                    style={{ fontFamily: "'Emblema One', cursive" }}
+                  >
+                    {item.date}
+                  </div>
+                </div>
+
+                {/* Timeline Dot */}
                 <div
-                  className={[
-                    'absolute left-0 top-[14px] grid h-6 w-6 place-items-center border-2 bg-[#0F0F23] shadow-[3px_3px_0px_rgba(124,58,237,0.45)]',
-                    unlocked ? 'border-[#22C55E] text-[#86EFAC]' : 'border-[#334155] text-[#94A3B8] grayscale',
-                    active ? 'shadow-[4px_4px_0px_rgba(244,63,94,0.55)]' : ''
-                  ].join(' ')}
+                  className={`absolute -left-[13px] top-1.5 flex h-6 w-6 items-center justify-center rounded-full border-2 transition-all duration-300 bg-zinc-950 z-10 ${
+                    unlocked ? 'border-emerald-400' : 'border-zinc-700'
+                  } ${active ? 'scale-125 ring-4 ring-indigo-500/20 border-indigo-400 shadow-[0_0_15px_rgba(99,102,241,0.4)]' : 'group-hover:scale-110'}`}
                 >
-                  {unlocked ? '✓' : '🔒'}
+                  <div className={`w-2 h-2 rounded-full ${unlocked ? 'bg-emerald-400' : 'bg-zinc-700'} ${active ? 'bg-indigo-400' : ''}`} />
                 </div>
 
                 <div
                   data-timeline-card
-                  className={[
-                    'border-2 bg-[#0F0F23] p-5 shadow-[4px_4px_0px_rgba(124,58,237,0.55)] transition-transform duration-150',
-                    'hover:-translate-y-[1px]',
-                    unlocked ? 'border-[#7C3AED]' : 'border-[#334155] grayscale brightness-75',
-                    active ? 'shadow-[4px_4px_0px_rgba(244,63,94,0.55)]' : ''
-                  ].join(' ')}
+                  className={`rounded-xl border p-5 md:p-6 transition-all duration-300 ${
+                    unlocked ? 'border-white/10 bg-white/5' : 'border-white/5 bg-transparent opacity-60'
+                  } ${active ? 'border-indigo-500/50 bg-indigo-500/10 shadow-[0_0_20px_rgba(99,102,241,0.1)]' : 'group-hover:border-white/20 group-hover:bg-white/10'}`}
                 >
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="min-w-0">
-                      <div className="text-[#E2E8F0] font-semibold truncate">{item.title}</div>
-                      <div className="mt-1 text-[12px] text-[#94A3B8]">
-                        <span className="font-['PressStart2P'] text-[10px] text-[#A78BFA]">
+                  <div className="flex items-center justify-between gap-6">
+                    <div className="min-w-0 flex-1">
+                      <div className={`font-bold text-lg md:text-xl truncate transition-colors duration-300 ${active ? 'text-indigo-300' : 'text-zinc-100'}`}>
+                        {item.title}
+                      </div>
+                      <div className="mt-2 flex items-center gap-3 text-xs md:text-sm text-zinc-500 uppercase tracking-wider font-semibold">
+                        <span className={active ? 'text-indigo-400' : 'text-zinc-400'}>
                           {milestone?.label ?? 'MILESTONE'}
                         </span>
-                        <span className="ml-2">{item.date}</span>
-                        <span className="ml-2">
-                          目标 <span className="font-['PressStart2P']">{milestonePct}%</span>
-                        </span>
+                        <span className="text-zinc-700">•</span>
+                        <span className="text-indigo-400/80" style={{ fontFamily: "'Emblema One', cursive" }}>{milestonePct}%</span>
                       </div>
                     </div>
-                    <div className="shrink-0 border-2 border-[#334155] bg-black/20 px-3 py-2 text-[11px] text-[#94A3B8] shadow-[3px_3px_0px_rgba(51,65,85,0.75)]">
-                      {unlocked ? '查看' : '查看'}
+                    <div className={`shrink-0 flex items-center justify-center w-8 h-8 rounded-full border transition-all duration-300 ${
+                      active ? 'border-indigo-500/50 text-indigo-400 bg-indigo-500/20 rotate-90' : 'border-white/10 text-zinc-500 group-hover:text-zinc-300 group-hover:border-white/30'
+                    }`}>
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
                     </div>
                   </div>
 
-                  <div className="mt-3 text-[13px] leading-relaxed text-[#CBD5E1]">{item.detail}</div>
-                  {item.result ? (
-                    <div className="mt-4 border-l-2 border-[#F43F5E] pl-4 text-[13px] text-[#E2E8F0]">
-                      <span className="font-['PressStart2P'] text-[10px] text-[#FCA5A5]">RESULT</span>
-                      <span className="ml-2">{item.result}</span>
+                  <div className={`grid transition-all duration-500 ease-in-out ${active ? 'grid-rows-[1fr] opacity-100 mt-6' : 'grid-rows-[0fr] opacity-0'}`}>
+                    <div className="overflow-hidden">
+                      <div className="border-t border-white/5 pt-6 space-y-6">
+                        {milestone?.description ? (
+                          <div className="text-sm md:text-base text-indigo-300/90 leading-relaxed italic bg-indigo-500/5 p-4 rounded-lg border border-indigo-500/10">
+                            {milestone.description}
+                          </div>
+                        ) : null}
+                        
+                        <div className="text-base md:text-lg leading-relaxed text-zinc-300 font-light">
+                          {item.detail}
+                        </div>
+                        
+                        {item.result ? (
+                          <div className="mt-6 border-l-4 border-indigo-500/50 pl-4 py-2 text-base md:text-lg text-zinc-200 bg-indigo-500/5 rounded-r-lg">
+                            <span className="text-xs font-bold text-indigo-400 uppercase tracking-widest block mb-2">Result</span>
+                            {item.result}
+                          </div>
+                        ) : null}
+                      </div>
                     </div>
-                  ) : null}
+                  </div>
                 </div>
               </button>
             );

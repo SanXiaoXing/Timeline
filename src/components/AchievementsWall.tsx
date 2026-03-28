@@ -2,7 +2,7 @@ import React, { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import AchievementCard from './AchievementCard';
 import type { Achievement, AchievementCategory } from '../contents/achievements';
-import { achievementCategoryLabels, achievements as baseAchievements } from '../contents/achievements';
+import { achievementCategoryLabels } from '../contents/achievements';
 
 type StatusFilter = 'all' | 'unlocked' | 'locked';
 
@@ -15,10 +15,10 @@ const categories: Array<{ key: 'all' | AchievementCategory; label: string }> = [
   { key: 'mindset', label: achievementCategoryLabels.mindset }
 ];
 
-const AchievementsWall: React.FC = () => {
+const AchievementsWall: React.FC<{ initialAchievements: Achievement[] }> = ({ initialAchievements }) => {
   const [activeCategory, setActiveCategory] = useState<'all' | AchievementCategory>('all');
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
-  const [achievements] = useState<Achievement[]>(baseAchievements);
+  const [achievements] = useState<Achievement[]>(initialAchievements);
   const gridRef = useRef<HTMLDivElement | null>(null);
 
   useLayoutEffect(() => {
@@ -48,52 +48,61 @@ const AchievementsWall: React.FC = () => {
 
   return (
     <div className="mx-auto max-w-7xl px-4 pb-20 pt-28 md:pt-32">
-      <header className="mb-10">
-        <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-          <div>
-            <div className="inline-flex items-center gap-2 border-2 border-[#7C3AED] bg-[#0B0B1A] px-3 py-2 shadow-[4px_4px_0px_#7C3AED]">
-              <span className="font-['PressStart2P'] text-[12px] text-[#A78BFA]">ACHIEVEMENTS</span>
-              <span className="text-[#94A3B8] text-[12px]">成就墙</span>
-            </div>
-            <h1 className="mt-6 text-3xl md:text-5xl font-bold text-[#E2E8F0] drop-shadow-[4px_4px_0px_rgba(124,58,237,0.85)]">
-              <span className="font-['PressStart2P'] tracking-tight">TROPHY ROOM</span>
+      {/* Back Button */}
+      <div className="mb-8 md:mb-12">
+        <a 
+          href="/" 
+          className="group relative inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-zinc-900/40 border border-white/10 text-zinc-400 hover:text-indigo-200 hover:border-indigo-500/30 transition-all duration-500 overflow-hidden"
+        >
+          {/* Hover Glow Effect */}
+          <div className="absolute inset-0 bg-indigo-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+          <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 shadow-[0_0_20px_rgba(99,102,241,0.2)_inset] pointer-events-none rounded-full"></div>
+          
+          <svg className="w-4 h-4 transition-transform duration-300 group-hover:-translate-x-1 relative z-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
+          <span className="text-sm font-medium tracking-wide relative z-10">返回首页</span>
+        </a>
+      </div>
+
+      <header className="mb-16">
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-10">
+          <div className="max-w-2xl">
+            <h1 className="text-4xl md:text-5xl font-semibold text-zinc-100 tracking-tight">
+              成就记录
             </h1>
-            <p className="mt-4 max-w-2xl text-[#94A3B8] text-lg md:text-xl leading-relaxed">
-              未解锁成就处于锁定状态，解锁状态以数据文件为准。
+            <p className="mt-4 text-zinc-400 text-base md:text-lg leading-relaxed font-light">
+              记录生活、工作与学习中的每一个重要里程碑。<br className="hidden md:block" />
+              未解锁的成就将保持隐匿状态，等待在未来的某一刻被点亮。
             </p>
           </div>
 
-          <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
-            <div className="border-2 border-[#7C3AED] bg-[#0B0B1A] p-4 shadow-[4px_4px_0px_#7C3AED]">
-              <div className="text-[11px] text-[#A78BFA] font-['PressStart2P']">UNLOCKED</div>
-              <div className="mt-2 text-2xl font-bold text-[#E2E8F0] tabular-nums font-['PressStart2P']">
-                {stats.unlocked}/{stats.total}
-              </div>
+          <div className="flex items-center gap-8 md:gap-12 pb-2">
+            <div className="flex flex-col">
+              <span className="text-3xl md:text-4xl font-light text-zinc-100 tracking-tight tabular-nums">
+                {stats.unlocked}<span className="text-lg md:text-xl text-zinc-600 font-normal">/{stats.total}</span>
+              </span>
+              <span className="text-xs text-zinc-500 mt-2 font-medium tracking-wider uppercase">已解锁</span>
             </div>
-            <div className="border-2 border-[#334155] bg-[#0B0B1A] p-4 shadow-[4px_4px_0px_rgba(51,65,85,0.75)]">
-              <div className="text-[11px] text-[#94A3B8] font-['PressStart2P']">EPIC</div>
-              <div className="mt-2 text-2xl font-bold text-[#E2E8F0] tabular-nums font-['PressStart2P']">
+            <div className="w-px h-10 bg-zinc-800"></div>
+            <div className="flex flex-col">
+              <span className="text-3xl md:text-4xl font-light text-indigo-300 tracking-tight tabular-nums">
                 {stats.epic}
-              </div>
+              </span>
+              <span className="text-xs text-zinc-500 mt-2 font-medium tracking-wider uppercase">史诗</span>
             </div>
-            <div className="border-2 border-[#F59E0B] bg-[#0B0B1A] p-4 shadow-[4px_4px_0px_rgba(245,158,11,0.55)]">
-              <div className="text-[11px] text-[#FCD34D] font-['PressStart2P']">LEGEND</div>
-              <div className="mt-2 text-2xl font-bold text-[#E2E8F0] tabular-nums font-['PressStart2P']">
+            <div className="w-px h-10 bg-zinc-800"></div>
+            <div className="flex flex-col">
+              <span className="text-3xl md:text-4xl font-light text-amber-300 tracking-tight tabular-nums">
                 {stats.legendary}
-              </div>
+              </span>
+              <span className="text-xs text-zinc-500 mt-2 font-medium tracking-wider uppercase">传说</span>
             </div>
-            <a
-              href="/"
-              className="group border-2 border-[#F43F5E] bg-[#0B0B1A] p-4 shadow-[4px_4px_0px_rgba(244,63,94,0.55)] transition-transform duration-200 hover:-translate-y-[2px]"
-            >
-              <div className="text-[11px] text-[#FCA5A5] font-['PressStart2P']">BACK</div>
-              <div className="mt-2 text-[14px] text-[#E2E8F0] group-hover:text-white">返回首页</div>
-            </a>
           </div>
         </div>
       </header>
 
-      <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+      <div className="mb-12 flex flex-col gap-6 md:flex-row md:items-center md:justify-between border-t border-white/5 pt-8">
         <div className="flex flex-wrap gap-2">
           {categories.map(c => {
             const active = c.key === activeCategory;
@@ -102,31 +111,31 @@ const AchievementsWall: React.FC = () => {
                 key={c.key}
                 type="button"
                 onClick={() => setActiveCategory(c.key)}
-                className={[
-                  'border-2 px-3 py-2 shadow-[3px_3px_0px_rgba(124,58,237,0.55)] transition-transform duration-200',
-                  'hover:-translate-y-[1px]',
-                  active ? 'border-[#F43F5E] bg-[#1A1A2E] text-[#E2E8F0]' : 'border-[#334155] bg-[#0B0B1A] text-[#94A3B8]'
-                ].join(' ')}
+                className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 border backdrop-blur-sm ${
+                  active 
+                    ? 'bg-zinc-100 border-zinc-100 text-zinc-900 shadow-[0_0_15px_rgba(255,255,255,0.1)]' 
+                    : 'bg-white/5 border-white/10 text-zinc-400 hover:bg-white/10 hover:text-zinc-200'
+                }`}
               >
-                <span className="text-[12px] font-['PressStart2P']">{c.label}</span>
+                <span>{c.label}</span>
               </button>
             );
           })}
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1 p-1 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm">
           {(['all', 'unlocked', 'locked'] as const).map(k => (
             <button
               key={k}
               type="button"
               onClick={() => setStatusFilter(k)}
-              className={[
-                'border-2 px-3 py-2 shadow-[3px_3px_0px_rgba(51,65,85,0.75)] transition-transform duration-200',
-                'hover:-translate-y-[1px]',
-                statusFilter === k ? 'border-[#22C55E] bg-[#0B0B1A] text-[#E2E8F0]' : 'border-[#334155] bg-[#0B0B1A] text-[#94A3B8]'
-              ].join(' ')}
+              className={`px-4 py-1.5 rounded-full text-xs font-medium transition-all duration-300 ${
+                statusFilter === k 
+                  ? 'bg-white/10 text-zinc-100 shadow-sm' 
+                  : 'text-zinc-400 hover:text-zinc-200'
+              }`}
             >
-              <span className="text-[12px] font-['PressStart2P']">
+              <span>
                 {k === 'all' ? '全部' : k === 'unlocked' ? '已解锁' : '未解锁'}
               </span>
             </button>
@@ -136,11 +145,13 @@ const AchievementsWall: React.FC = () => {
 
       <div
         ref={gridRef}
-        className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3"
+        className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
         aria-label="Achievements grid"
       >
-        {filtered.map(a => (
-          <AchievementCard key={a.id} achievement={a} />
+        {filtered.map(item => (
+          <div key={item.id} className="min-h-[220px]">
+            <AchievementCard achievement={item} />
+          </div>
         ))}
       </div>
     </div>

@@ -48,110 +48,77 @@ const CardNav: React.FC<CardNavProps> = ({
   const navRef = useRef<HTMLDivElement | null>(null);
   const cardsRef = useRef<HTMLDivElement[]>([]);
   const tlRef = useRef<gsap.core.Timeline | null>(null);
-
-  const calculateHeight = () => {
-    const navEl = navRef.current;
-    if (!navEl) return 260;
-
-    const isMobile = window.matchMedia('(max-width: 768px)').matches;
-    if (isMobile) {
-      const contentEl = navEl.querySelector('.card-nav-content') as HTMLElement;
-      if (contentEl) {
-        const wasVisible = contentEl.style.visibility;
-        const wasPointerEvents = contentEl.style.pointerEvents;
-        const wasPosition = contentEl.style.position;
-        const wasHeight = contentEl.style.height;
-
-        contentEl.style.visibility = 'visible';
-        contentEl.style.pointerEvents = 'auto';
-        contentEl.style.position = 'static';
-        contentEl.style.height = 'auto';
-
-        contentEl.offsetHeight;
-
-        const topBar = 60;
-        const padding = 16;
-        const contentHeight = contentEl.scrollHeight;
-
-        contentEl.style.visibility = wasVisible;
-        contentEl.style.pointerEvents = wasPointerEvents;
-        contentEl.style.position = wasPosition;
-        contentEl.style.height = wasHeight;
-
-        return topBar + contentHeight + padding;
-      }
-    }
-    return 260;
-  };
-
-  const createTimeline = () => {
-    const navEl = navRef.current;
-    if (!navEl) return null;
-
-    gsap.set(navEl, { height: 60, overflow: 'hidden' });
-    gsap.set(cardsRef.current, { y: 50, opacity: 0 });
-
-    const tl = gsap.timeline({ paused: true });
-
-    tl.to(navEl, {
-      height: calculateHeight,
-      duration: 0.4,
-      ease
-    });
-
-    tl.to(cardsRef.current, { y: 0, opacity: 1, duration: 0.4, ease, stagger: 0.08 }, '-=0.1');
-
-    return tl;
-  };
+  const logoRef = useRef<HTMLSpanElement | null>(null);
+  const contentRef = useRef<HTMLDivElement | null>(null);
+  const ctxRef = useRef<gsap.Context | null>(null);
 
   useLayoutEffect(() => {
-    const tl = createTimeline();
-    tlRef.current = tl;
+    const ctx = gsap.context(() => {
+      const navEl = navRef.current;
+      if (!navEl) return;
 
-    return () => {
-      tl?.kill();
-      tlRef.current = null;
-    };
-  }, [ease, items]);
-
-  useLayoutEffect(() => {
-    const handleResize = () => {
-      if (!tlRef.current) return;
-
-      if (isExpanded) {
-        const newHeight = calculateHeight();
-        gsap.set(navRef.current, { height: newHeight });
-
-        tlRef.current.kill();
-        const newTl = createTimeline();
-        if (newTl) {
-          newTl.progress(1);
-          tlRef.current = newTl;
+      const calcHeight = () => {
+        const isMobile = window.matchMedia('(max-width: 768px)').matches;
+        if (isMobile) {
+          const contentEl = contentRef.current;
+          if (contentEl) {
+            const clone = contentEl.cloneNode(true) as HTMLElement;
+            Object.assign(clone.style, {
+              position: 'absolute',
+              visibility: 'hidden',
+              height: 'auto',
+              width: contentEl.offsetWidth + 'px',
+              display: 'flex',
+              flexDirection: 'column'
+            });
+            document.body.appendChild(clone);
+            const h = clone.offsetHeight;
+            document.body.removeChild(clone);
+            return 60 + h + 16;
+          }
         }
-      } else {
-        tlRef.current.kill();
-        const newTl = createTimeline();
-        if (newTl) {
-          tlRef.current = newTl;
-        }
-      }
-    };
+        return 260;
+      };
 
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, [isExpanded]);
+      gsap.set(navEl, { height: 60, overflow: 'hidden' });
+      gsap.set(cardsRef.current, { y: 20, opacity: 0 });
+      gsap.set(contentRef.current, { autoAlpha: 0 });
+
+      const tl = gsap.timeline({ 
+        paused: true,
+        defaults: { ease: 'expo.out', duration: 0.5, force3D: true }
+      });
+
+      tl.to(navEl, {
+        height: calcHeight,
+      })
+      .to(contentRef.current, { 
+        autoAlpha: 1, 
+        duration: 0.3 
+      }, '<')
+      .to(cardsRef.current, { 
+        y: 0, 
+        opacity: 1, 
+        stagger: 0.04 
+      }, '-=0.3');
+
+      tlRef.current = tl;
+    }, navRef);
+
+    return () => ctx.revert();
+  }, [items]);
 
   const toggleMenu = () => {
     const tl = tlRef.current;
     if (!tl) return;
+    
     if (!isExpanded) {
       setIsHamburgerOpen(true);
       setIsExpanded(true);
-      tl.play(0);
+      tl.play();
     } else {
       setIsHamburgerOpen(false);
-      tl.eventCallback('onReverseComplete', () => setIsExpanded(false));
-      tl.reverse();
+      tl.reverse().eventCallback('onReverseComplete', () => setIsExpanded(false));
     }
   };
 
@@ -194,46 +161,42 @@ const CardNav: React.FC<CardNavProps> = ({
               <img src={logo} alt={logoAlt} className="logo h-[28px]" />
             ) : (
               <span 
-                className="logo-text text-xl font-bold"
-                style={{ fontFamily: logoFont }}
+                ref={logoRef}
+                className="logo-text text-2xl font-bold tracking-tighter"
+                style={{ fontFamily: logoFont || "'Emblema One', cursive" }}
               >
                 {logoText}
               </span>
             )}
           </div>
-
-          {/* <button
-            type="button"
-            className="card-nav-cta-button hidden md:inline-flex border-0 rounded-[calc(0.75rem-0.2rem)] px-4 items-center h-full font-medium cursor-pointer transition-colors duration-300"
-            style={{ backgroundColor: buttonBgColor, color: buttonTextColor }}
-          >
-            Get Started
-          </button> */}
         </div>
 
         <div
-          className={`card-nav-content absolute left-0 right-0 top-[60px] bottom-0 p-2 flex flex-col items-stretch gap-2 justify-start z-[1] ${
-            isExpanded ? 'visible pointer-events-auto' : 'invisible pointer-events-none'
-          } md:flex-row md:items-end md:gap-[12px]`}
+          ref={contentRef}
+          className={`card-nav-content absolute left-0 right-0 top-[60px] bottom-0 p-2 flex flex-col items-stretch gap-2 justify-start z-[1] md:flex-row md:items-end md:gap-[12px]`}
           aria-hidden={!isExpanded}
         >
           {(items || []).slice(0, 3).map((item, idx) => (
             <div
               key={`${item.label}-${idx}`}
-              className="nav-card select-none relative flex flex-col gap-2 p-[12px_16px] min-w-0 flex-[1_1_auto] h-auto min-h-[60px] md:h-full md:min-h-0 md:flex-[1_1_0%] border-2 border-[#7C3AED] shadow-[4px_4px_0px_#7C3AED]"
+              className="nav-card select-none relative flex flex-col gap-2 p-[16px_20px] min-w-0 flex-[1_1_auto] h-auto min-h-[60px] md:h-full md:min-h-0 md:flex-[1_1_0%] border border-white/10 rounded-2xl transition-all duration-300 hover:bg-white/10"
               ref={setCardRef(idx)}
-              style={{ backgroundColor: item.bgColor, color: item.textColor }}
+              style={{ backgroundColor: item.bgColor, color: item.textColor, fontFamily: "'Emblema One', cursive" }}
             >
-              <div className="nav-card-label font-normal tracking-[-0.5px] text-[20px] md:text-[24px] font-['PressStart2P']">
+              <div 
+                className="nav-card-label font-bold tracking-tight text-[24px] md:text-[28px]"
+                style={{ fontFamily: "'Emblema One', cursive" }}
+              >
                 {item.label}
               </div>
-              <div className="nav-card-links mt-auto flex flex-col gap-[2px]">
+              <div className="nav-card-links mt-auto flex flex-col gap-[4px]">
                 {item.links?.map((lnk, i) => (
                   <a
                     key={`${lnk.label}-${i}`}
-                    className="nav-card-link inline-flex items-center gap-[6px] no-underline cursor-pointer transition-opacity duration-300 hover:opacity-75 text-[16px] md:text-[18px]"
+                    className="nav-card-link inline-flex items-center gap-[8px] no-underline cursor-pointer transition-colors duration-300 text-zinc-400 hover:text-zinc-100 text-[16px] md:text-[18px]"
                     href={lnk.href}
                     aria-label={lnk.ariaLabel}
+                    style={{ fontFamily: "'Emblema One', cursive" }}
                   >
                     <GoArrowUpRight className="nav-card-link-icon shrink-0" aria-hidden="true" />
                     {lnk.label}
