@@ -1,6 +1,7 @@
 ---
 import SmoothScroll from '../components/SmoothScroll';
-import StarryBackground from '../components/StarryBackground';
+  import StarryBackground from '../components/StarryBackground';
+  import Footer from '../components/Footer';
 ---
 
 <!doctype html>
@@ -46,8 +47,11 @@ import StarryBackground from '../components/StarryBackground';
 	<body class="bg-zinc-950 text-zinc-100 antialiased selection:bg-indigo-500/30 selection:text-indigo-200 font-sans">
 		<StarryBackground client:load />
 		<div id="smooth-wrapper">
-			<div id="smooth-content">
-				<slot />
+			<div id="smooth-content" class="relative z-10">
+				<main class="relative z-20 bg-zinc-950/20">
+					<slot />
+				</main>
+				<Footer client:load />
 			</div>
 		</div>
 		<SmoothScroll client:load />
