@@ -68,8 +68,8 @@ list:
 
   - id: 'study-02'
     icon: '📖'
-	name: '丰富读书'
-	description: '完整阅读一本自己喜欢的书'
+    name: '丰富读书'
+    description: '完整阅读一本自己喜欢的书'
     category: ['study', 'life']
     rarity: 'legendary'
     progressPct: 10
@@ -77,8 +77,8 @@ list:
 
   - id: 'study-03'
     icon: '✍️'
-	name: '书法练字'
-	description: '书法练字，是自己变得更加平和'
+    name: '书法练字'
+    description: '书法练字，是自己变得更加平和'
     category: ['mindset', 'life']
     rarity: 'legendary'
     progressPct: 20
