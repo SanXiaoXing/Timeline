@@ -49,4 +49,16 @@ const achievements = defineCollection({
   }),
 });
 
-export const collections = { projects, achievements };
+const xing = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/content/xing" }),
+  schema: z.object({
+    quotes: z.array(
+      z.object({
+        date: z.string(),
+        items: z.array(z.string()),
+      })
+    ).optional().default([]),
+  }),
+});
+
+export const collections = { projects, achievements, xing };

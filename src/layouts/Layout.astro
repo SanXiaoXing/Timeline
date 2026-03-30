@@ -1,7 +1,7 @@
 ---
 import SmoothScroll from '../components/SmoothScroll';
-  import StarryBackground from '../components/StarryBackground';
-  import Footer from '../components/Footer';
+import LightBackground from '../components/LightBackground';
+import Footer from '../components/Footer';
 ---
 
 <!doctype html>
@@ -27,28 +27,34 @@ import SmoothScroll from '../components/SmoothScroll';
 				font-style: normal;
 				font-display: swap;
 			}
-			/* Modern Scrollbar */
+			/* Light Theme Scrollbar */
 			::-webkit-scrollbar {
 				width: 8px;
 			}
 			::-webkit-scrollbar-track {
-				background: #09090b; /* zinc-950 */
+				background: #f5f5f5;
 			}
 			::-webkit-scrollbar-thumb {
-				background: #27272a; /* zinc-800 */
+				background: #d4d4d8;
 				border-radius: 4px;
-				border: 2px solid #09090b;
+				border: 2px solid #f5f5f5;
 			}
 			::-webkit-scrollbar-thumb:hover {
-				background: #3f3f46; /* zinc-700 */
+				background: #a1a1aa;
+			}
+			
+			/* Selection color */
+			::selection {
+				background: rgba(99, 102, 241, 0.2);
+				color: #4338ca;
 			}
 		</style>
 	</head>
-	<body class="bg-zinc-950 text-zinc-100 antialiased selection:bg-indigo-500/30 selection:text-indigo-200 font-sans">
-		<StarryBackground client:load />
+	<body class="bg-neutral-50 text-neutral-800 antialiased selection:bg-indigo-500/20 selection:text-indigo-700 font-sans">
+		<LightBackground client:load />
 		<div id="smooth-wrapper">
 			<div id="smooth-content" class="relative z-10">
-				<main class="relative z-20 bg-zinc-950/20">
+				<main class="relative z-20">
 					<slot />
 				</main>
 				<Footer client:load />

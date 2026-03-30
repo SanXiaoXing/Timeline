@@ -34,14 +34,10 @@ function daysInMonth(year: number, monthIndex: number): number {
 }
 
 function getWeekNumber(date: Date): number {
-  // 复制日期以避免修改原日期
   const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
-  // 设置为最近的周四：当前日期 + 4 - 当前星期几（周日为7）
   const dayNum = d.getUTCDay() || 7;
   d.setUTCDate(d.getUTCDate() + 4 - dayNum);
-  // 获取当年的1月1日
   const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
-  // 计算周数
   return Math.ceil((((d.getTime() - yearStart.getTime()) / 86400000) + 1) / 7);
 }
 
@@ -64,12 +60,8 @@ function computeProgress(now: Date): { day: number; month: number; year: number;
   const msIntoDay = now.getTime() - dayStart.getTime();
   const day = clamp(msIntoDay / msInDay, 0, 1);
 
-  // 周进度：以周一为一周的开始，计算本周已过时间
-  // 获取当前是周几，周日为0，转为周一为0，周日为6
-  const dayOfWeek = now.getDay(); 
-  // 将周日从0变为7，方便计算（1-7）
+  const dayOfWeek = now.getDay();
   const isoDay = dayOfWeek === 0 ? 7 : dayOfWeek;
-  // 本周已过的完整天数 = isoDay - 1
   const daysIntoWeek = isoDay - 1;
   const msIntoWeek = daysIntoWeek * msInDay + msIntoDay;
   const msInWeek = 7 * msInDay;
@@ -240,7 +232,7 @@ const TimeProgress: React.FC<{ className?: string }> = ({ className }) => {
       <div className="mx-auto max-w-4xl text-center">
       </div>
 
-      <div ref={pinRef} className="mt-12 overflow-hidden rounded-3xl border border-white/10 bg-zinc-900/30 backdrop-blur-md relative shadow-2xl">
+      <div ref={pinRef} className="mt-12 overflow-hidden rounded-3xl border border-neutral-200/50 bg-white/70 backdrop-blur-xl relative shadow-xl shadow-neutral-200/30">
         <div ref={trackRef} className="flex w-[250%]">
           <div
             ref={el => {
@@ -250,46 +242,46 @@ const TimeProgress: React.FC<{ className?: string }> = ({ className }) => {
           >
             <div className="flex items-start justify-between gap-6">
               <div>
-                <div className="text-2xl font-semibold text-indigo-400 tracking-wider uppercase mb-2">今天已过去</div>
-                <div className="text-4xl font-bold tracking-tight text-zinc-100 tabular-nums md:text-5xl flex items-baseline gap-1 [font-family:'Emblema_One']">
+                <div className="text-2xl font-semibold text-indigo-500 tracking-wider uppercase mb-2">今天已过去</div>
+                <div className="text-4xl font-bold tracking-tight text-neutral-800 tabular-nums md:text-5xl flex items-baseline gap-1 [font-family:'Emblema_One']">
                   <RollingNumber value={progress.day * 100} unit="" className="" />
-                  <span className="text-2xl text-zinc-500 font-light font-sans">%</span>
+                  <span className="text-2xl text-neutral-400 font-light font-sans">%</span>
                 </div>
-                <div className="mt-3 text-sm text-zinc-400 font-light">以当前时间为准</div>
+                <div className="mt-3 text-sm text-neutral-500 font-light">以当前时间为准</div>
               </div>
-              <div className="rounded-xl border border-white/10 bg-white/5 px-5 py-4 text-right backdrop-blur-sm">
-                <div className="text-[15px] text-zinc-500 uppercase tracking-wider mb-1">当前时间</div>
-                <div className="text-xl font-semibold text-zinc-200 tabular-nums tracking-widest [font-family:'Emblema_One']">
+              <div className="rounded-xl border border-neutral-200/50 bg-white/50 px-5 py-4 text-right backdrop-blur-sm shadow-sm">
+                <div className="text-[15px] text-neutral-500 uppercase tracking-wider mb-1">当前时间</div>
+                <div className="text-xl font-semibold text-neutral-700 tabular-nums tracking-widest [font-family:'Emblema_One']">
                   <RollingNumber value={header.timeText} unit="" className="" />
                 </div>
               </div>
             </div>
 
             <div className="mt-10">
-              <div className="h-4 w-full rounded-full overflow-hidden bg-zinc-800/50 border border-white/5 shadow-inner">
+              <div className="h-4 w-full rounded-full overflow-hidden bg-neutral-200/50 border border-neutral-200/30 shadow-inner">
                 <div
                   ref={el => {
                     progressRefs.current.dayBar = el;
                   }}
                   className="h-full origin-left bg-gradient-to-r from-indigo-500 to-cyan-400 scale-x-0 relative"
                 >
-                    <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-r from-transparent to-white/30"></div>
+                    <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-r from-transparent to-white/50"></div>
                 </div>
               </div>
               <div className="mt-8 grid grid-cols-2 gap-6">
-                <div className="rounded-2xl border border-white/5 bg-white/5 p-6 transition-all duration-300 hover:bg-white/10">
-                  <div className="text-[15px] text-zinc-500 uppercase tracking-wider mb-2">本年第</div>
-                  <div className="text-3xl font-bold tracking-tight text-zinc-200 tabular-nums flex items-baseline gap-1 [font-family:'Emblema_One']">
-                    <span>{header.weekNo}</span> <span className="text-sm text-zinc-500 font-normal font-sans">周</span>
+                <div className="rounded-2xl border border-neutral-200/50 bg-white/50 p-6 transition-all duration-300 hover:bg-white/80 hover:shadow-lg hover:shadow-indigo-100/50" data-magnetic>
+                  <div className="text-[15px] text-neutral-500 uppercase tracking-wider mb-2">本年第</div>
+                  <div className="text-3xl font-bold tracking-tight text-neutral-700 tabular-nums flex items-baseline gap-1 [font-family:'Emblema_One']">
+                    <span>{header.weekNo}</span> <span className="text-sm text-neutral-400 font-normal font-sans">周</span>
                   </div>
                 </div>
-                <div className="rounded-2xl border border-white/5 bg-white/5 p-6 transition-all duration-300 hover:bg-white/10">
-                  <div className="text-[15px] text-zinc-500 uppercase tracking-wider mb-2">本周进度</div>
-                  <div className="text-3xl font-bold tracking-tight text-zinc-200 tabular-nums flex items-baseline gap-1 [font-family:'Emblema_One']">
+                <div className="rounded-2xl border border-neutral-200/50 bg-white/50 p-6 transition-all duration-300 hover:bg-white/80 hover:shadow-lg hover:shadow-indigo-100/50" data-magnetic>
+                  <div className="text-[15px] text-neutral-500 uppercase tracking-wider mb-2">本周进度</div>
+                  <div className="text-3xl font-bold tracking-tight text-neutral-700 tabular-nums flex items-baseline gap-1 [font-family:'Emblema_One']">
                     <RollingNumber value={progress.week * 100} unit="" className="" />
-                    <span className="text-sm text-zinc-500 font-normal font-sans">%</span>
+                    <span className="text-sm text-neutral-400 font-normal font-sans">%</span>
                   </div>
-                  <div className="mt-4 h-2 w-full rounded-full overflow-hidden bg-zinc-800/50">
+                  <div className="mt-4 h-2 w-full rounded-full overflow-hidden bg-neutral-200/50">
                     <div
                       ref={el => {
                         progressRefs.current.weekBar = el;
@@ -310,40 +302,40 @@ const TimeProgress: React.FC<{ className?: string }> = ({ className }) => {
           >
             <div className="flex items-start justify-between gap-6">
               <div>
-                <div className="text-2xl font-semibold text-cyan-400 tracking-wider uppercase mb-2">本月已过去</div>
-                <div className="text-4xl font-bold tracking-tight text-zinc-100 tabular-nums md:text-5xl flex items-baseline gap-1 [font-family:'Emblema_One']">
+                <div className="text-2xl font-semibold text-cyan-500 tracking-wider uppercase mb-2">本月已过去</div>
+                <div className="text-4xl font-bold tracking-tight text-neutral-800 tabular-nums md:text-5xl flex items-baseline gap-1 [font-family:'Emblema_One']">
                   <RollingNumber value={progress.month * 100} unit="" className="" />
-                  <span className="text-2xl text-zinc-500 font-light font-sans">%</span>
+                  <span className="text-2xl text-neutral-400 font-light font-sans">%</span>
                 </div>
-                <div className="mt-3 text-sm text-zinc-400 font-light flex items-center gap-2">
-                  <span className="font-medium text-zinc-300 [font-family:'Emblema_One'] tracking-widest">{header.year}</span>年
-                  <span className="font-medium text-zinc-300 [font-family:'Emblema_One'] tracking-widest">{header.monthIndex + 1}</span>月
-                  <span className="font-medium text-zinc-300 [font-family:'Emblema_One'] tracking-widest">{header.dayOfMonth}</span>日
+                <div className="mt-3 text-sm text-neutral-500 font-light flex items-center gap-2">
+                  <span className="font-medium text-neutral-600 [font-family:'Emblema_One'] tracking-widest">{header.year}</span>年
+                  <span className="font-medium text-neutral-600 [font-family:'Emblema_One'] tracking-widest">{header.monthIndex + 1}</span>月
+                  <span className="font-medium text-neutral-600 [font-family:'Emblema_One'] tracking-widest">{header.dayOfMonth}</span>日
                 </div>
               </div>
-              <div className="rounded-xl border border-white/10 bg-white/5 px-5 py-4 text-right backdrop-blur-sm">
-                <div className="text-[15px] text-zinc-500 uppercase tracking-wider mb-1">日历</div>
-                <div className="text-xl font-semibold text-zinc-200 [font-family:'Emblema_One'] tracking-widest">
+              <div className="rounded-xl border border-neutral-200/50 bg-white/50 px-5 py-4 text-right backdrop-blur-sm shadow-sm">
+                <div className="text-[15px] text-neutral-500 uppercase tracking-wider mb-1">日历</div>
+                <div className="text-xl font-semibold text-neutral-700 [font-family:'Emblema_One'] tracking-widest">
                   <span>{header.monthIndex + 1}</span> <span className="text-base font-sans font-normal">月</span>
                 </div>
               </div>
             </div>
 
             <div className="mt-10">
-              <div className="h-4 w-full rounded-full overflow-hidden bg-zinc-800/50 border border-white/5 shadow-inner">
+              <div className="h-4 w-full rounded-full overflow-hidden bg-neutral-200/50 border border-neutral-200/30 shadow-inner">
                 <div
                   ref={el => {
                     progressRefs.current.monthBar = el;
                   }}
                   className="h-full origin-left bg-gradient-to-r from-cyan-500 to-emerald-400 scale-x-0 relative"
                 >
-                    <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-r from-transparent to-white/30"></div>
+                    <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-r from-transparent to-white/50"></div>
                 </div>
               </div>
             </div>
 
-            <div className="mt-8 rounded-2xl border border-white/5 bg-white/5 p-6 md:p-8">
-              <div className="grid grid-cols-7 gap-2 text-center text-xs text-zinc-500 font-medium mb-4">
+            <div className="mt-8 rounded-2xl border border-neutral-200/50 bg-white/50 p-6 md:p-8">
+              <div className="grid grid-cols-7 gap-2 text-center text-xs text-neutral-400 font-medium mb-4">
                 {['日', '一', '二', '三', '四', '五', '六'].map(d => (
                   <div key={d}>{d}</div>
                 ))}
@@ -355,9 +347,9 @@ const TimeProgress: React.FC<{ className?: string }> = ({ className }) => {
                       <div
                         className={cn(
                           'flex h-8 w-8 items-center justify-center rounded-full tabular-nums transition-all duration-300',
-                          cell.isToday 
-                            ? 'bg-cyan-500 text-zinc-950 font-bold shadow-[0_0_12px_rgba(6,182,212,0.5)]' 
-                            : 'text-zinc-400 hover:bg-white/10 hover:text-zinc-200 cursor-pointer'
+                          cell.isToday
+                            ? 'bg-cyan-500 text-white font-bold shadow-[0_0_12px_rgba(6,182,212,0.5)]'
+                            : 'text-neutral-500 hover:bg-white hover:text-neutral-700 cursor-pointer hover:shadow-md'
                         )}
                       >
                         <span>{cell.day}</span>
@@ -379,40 +371,40 @@ const TimeProgress: React.FC<{ className?: string }> = ({ className }) => {
           >
             <div className="flex items-start justify-between gap-6">
               <div>
-                <div className="text-2xl font-semibold text-emerald-400 tracking-wider uppercase mb-2">今年已过去</div>
-                <div className="text-4xl font-bold tracking-tight text-zinc-100 tabular-nums md:text-5xl flex items-baseline gap-1 [font-family:'Emblema_One']">
+                <div className="text-2xl font-semibold text-emerald-500 tracking-wider uppercase mb-2">今年已过去</div>
+                <div className="text-4xl font-bold tracking-tight text-neutral-800 tabular-nums md:text-5xl flex items-baseline gap-1 [font-family:'Emblema_One']">
                   <RollingNumber value={progress.year * 100} unit="" className="" />
-                  <span className="text-2xl text-zinc-500 font-light font-sans">%</span>
+                  <span className="text-2xl text-neutral-400 font-light font-sans">%</span>
                 </div>
-                <div className="mt-3 text-sm text-zinc-400 font-light">按自然年累计进度</div>
+                <div className="mt-3 text-sm text-neutral-500 font-light">按自然年累计进度</div>
               </div>
-              <div className="rounded-xl border border-white/10 bg-white/5 px-5 py-4 text-right backdrop-blur-sm">
-                <div className="text-[15px] text-zinc-500 uppercase tracking-wider mb-1">年份</div>
-                <div className="text-xl font-semibold text-zinc-200 tabular-nums [font-family:'Emblema_One'] tracking-widest">
+              <div className="rounded-xl border border-neutral-200/50 bg-white/50 px-5 py-4 text-right backdrop-blur-sm shadow-sm">
+                <div className="text-[15px] text-neutral-500 uppercase tracking-wider mb-1">年份</div>
+                <div className="text-xl font-semibold text-neutral-700 tabular-nums [font-family:'Emblema_One'] tracking-widest">
                   <span>{header.year}</span>
                 </div>
               </div>
             </div>
 
             <div className="mt-10">
-              <div className="h-4 w-full rounded-full overflow-hidden bg-zinc-800/50 border border-white/5 shadow-inner">
+              <div className="h-4 w-full rounded-full overflow-hidden bg-neutral-200/50 border border-neutral-200/30 shadow-inner">
                 <div
                   ref={el => {
                     progressRefs.current.yearBar = el;
                   }}
                   className="h-full origin-left bg-gradient-to-r from-emerald-500 to-teal-400 scale-x-0 relative"
                 >
-                    <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-r from-transparent to-white/30"></div>
+                    <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-r from-transparent to-white/50"></div>
                 </div>
               </div>
               <div className="mt-8 grid gap-6 md:grid-cols-2">
-                <div className="rounded-2xl border border-white/5 bg-white/5 p-6 transition-all duration-300 hover:bg-white/10">
-                  <div className="text-[15px] text-zinc-500 uppercase tracking-wider mb-2">月份进度</div>
-                  <div className="text-3xl font-bold tracking-tight text-zinc-200 tabular-nums flex items-baseline gap-1 [font-family:'Emblema_One']">
+                <div className="rounded-2xl border border-neutral-200/50 bg-white/50 p-6 transition-all duration-300 hover:bg-white/80 hover:shadow-lg hover:shadow-emerald-100/50" data-magnetic>
+                  <div className="text-[15px] text-neutral-500 uppercase tracking-wider mb-2">月份进度</div>
+                  <div className="text-3xl font-bold tracking-tight text-neutral-700 tabular-nums flex items-baseline gap-1 [font-family:'Emblema_One']">
                     <span>{(progress.month * 100).toFixed(1)}</span>
-                    <span className="text-sm text-zinc-500 font-normal font-sans">%</span>
+                    <span className="text-sm text-neutral-400 font-normal font-sans">%</span>
                   </div>
-                  <div className="mt-4 h-2 w-full rounded-full overflow-hidden bg-zinc-800/50">
+                  <div className="mt-4 h-2 w-full rounded-full overflow-hidden bg-neutral-200/50">
                     <div
                       ref={el => {
                         progressRefs.current.extraMonthBar = el;
@@ -421,13 +413,13 @@ const TimeProgress: React.FC<{ className?: string }> = ({ className }) => {
                     />
                   </div>
                 </div>
-                <div className="rounded-2xl border border-white/5 bg-white/5 p-6 transition-all duration-300 hover:bg-white/10">
-                  <div className="text-[15px] text-zinc-500 uppercase tracking-wider mb-2">今日进度</div>
-                  <div className="text-3xl font-bold tracking-tight text-zinc-200 tabular-nums flex items-baseline gap-1 [font-family:'Emblema_One']">
+                <div className="rounded-2xl border border-neutral-200/50 bg-white/50 p-6 transition-all duration-300 hover:bg-white/80 hover:shadow-lg hover:shadow-indigo-100/50" data-magnetic>
+                  <div className="text-[15px] text-neutral-500 uppercase tracking-wider mb-2">今日进度</div>
+                  <div className="text-3xl font-bold tracking-tight text-neutral-700 tabular-nums flex items-baseline gap-1 [font-family:'Emblema_One']">
                     <span>{(progress.day * 100).toFixed(1)}</span>
-                    <span className="text-sm text-zinc-500 font-normal font-sans">%</span>
+                    <span className="text-sm text-neutral-400 font-normal font-sans">%</span>
                   </div>
-                  <div className="mt-4 h-2 w-full rounded-full overflow-hidden bg-zinc-800/50">
+                  <div className="mt-4 h-2 w-full rounded-full overflow-hidden bg-neutral-200/50">
                     <div
                       ref={el => {
                         progressRefs.current.extraDayBar = el;

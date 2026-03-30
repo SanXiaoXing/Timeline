@@ -1,0 +1,56 @@
+---
+import Layout from '../layouts/Layout.astro';
+import XingQuotes from '../components/XingQuotes';
+import CardNav from '../components/CardNav';
+import { getCollection } from 'astro:content';
+
+// Parse markdown content manually since we need custom parsing
+const xingEntry = await getCollection('xing');
+
+// Parse the markdown content to extract dates and quotes
+function parseQuotes(content: string) {
+  const quotes: { date: string; items: string[] }[] = [];
+  const lines = content.split('\n');
+  let currentDate = '';
+  let currentItems: string[] = [];
+
+  for (const line of lines) {
+    const dateMatch = line.match(/^#\s*(\d{4}-\d{2}-\d{2})/);
+    if (dateMatch) {
+      if (currentDate && currentItems.length > 0) {
+        quotes.push({ date: currentDate, items: currentItems });
+      }
+      currentDate = dateMatch[1];
+      currentItems = [];
+    } else if (line.trim().startsWith('- ') && currentDate) {
+      const item = line.trim().substring(2).trim();
+      if (item) {
+        currentItems.push(item);
+      }
+    }
+  }
+
+  if (currentDate && currentItems.length > 0) {
+    quotes.push({ date: currentDate, items: currentItems });
+  }
+
+  return quotes.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+}
+
+const quotes = xingEntry.length > 0 ? parseQuotes(xingEntry[0].body || '') : [];
+---
+
+<Layout>
+  <div class="relative min-h-screen overflow-hidden">
+    {/* Light Theme Background */}
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-100/30 via-transparent to-transparent pointer-events-none z-0"></div>
+    <div class="absolute inset-0 pointer-events-none z-0 opacity-30">
+      <div class="absolute -top-32 left-1/2 h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,rgba(99,102,241,0.2)_0%,transparent_62%)] blur-3xl"></div>
+      <div class="absolute -bottom-40 right-12 h-[520px] w-[520px] rounded-full bg-[radial-gradient(circle,rgba(34,211,238,0.15)_0%,transparent_62%)] blur-3xl"></div>
+    </div>
+
+    <div class="relative z-10 pt-32">
+      <XingQuotes client:load quotes={quotes} />
+    </div>
+  </div>
+</Layout>

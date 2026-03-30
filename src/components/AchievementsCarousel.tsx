@@ -68,16 +68,17 @@ const AchievementsCarousel: React.FC<{ initialAchievements: Achievement[] }> = (
     <section className="mx-auto max-w-7xl px-4 py-16 md:py-24">
       <div className="mb-12 flex flex-col md:flex-row items-start md:items-end justify-between gap-4">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight text-zinc-100 md:text-4xl">
-            Latest <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400">Achievements</span>
+          <h2 className="text-3xl font-bold tracking-tight text-neutral-800 md:text-4xl">
+            Latest <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-cyan-500">Achievements</span>
           </h2>
-          <p className="mt-3 text-sm text-zinc-400 md:text-base font-light">
+          <p className="mt-3 text-sm text-neutral-500 md:text-base font-light">
             Recent milestones and accomplishments.
           </p>
         </div>
         <a
           href="/achievements"
-          className="group inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-5 py-2.5 text-sm font-medium text-zinc-300 transition-all duration-300 hover:bg-white/10 hover:text-zinc-100 backdrop-blur-sm"
+          className="group inline-flex items-center gap-2 rounded-full border border-neutral-200/50 bg-white/50 px-5 py-2.5 text-sm font-medium text-neutral-600 transition-all duration-300 hover:bg-white hover:text-neutral-800 hover:shadow-lg hover:shadow-indigo-100/50 backdrop-blur-sm"
+          data-magnetic
         >
           View All
           <svg className="h-4 w-4 transform transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -88,7 +89,7 @@ const AchievementsCarousel: React.FC<{ initialAchievements: Achievement[] }> = (
 
       <div
         ref={viewportRef}
-        className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm"
+        className="relative overflow-hidden rounded-2xl border border-neutral-200/50 bg-white/50 backdrop-blur-sm"
         onMouseEnter={() => {
           pausedRef.current = true;
         }}
@@ -96,8 +97,8 @@ const AchievementsCarousel: React.FC<{ initialAchievements: Achievement[] }> = (
           pausedRef.current = false;
         }}
       >
-        <div className="pointer-events-none absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-[#0B0B1A] to-transparent z-[2]" />
-        <div className="pointer-events-none absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-[#0B0B1A] to-transparent z-[2]" />
+        <div className="pointer-events-none absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-neutral-50 to-transparent z-[2]" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-neutral-50 to-transparent z-[2]" />
 
         <div className="py-5">
           <div ref={trackRef} className="flex w-max items-stretch px-5">
