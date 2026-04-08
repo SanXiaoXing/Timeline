@@ -112,11 +112,32 @@
 - 无粒子效果
 
 ### 3.4 弹窗动画序列（已解锁）
-1. `0ms`：背景遮罩 `fadeIn`（200ms）
-2. `100ms`：弹窗 `scale(0.8) opacity(0)` → `scale(1) opacity(1)`（300ms，`back.out` 缓动）
-3. `200ms`：icon 外圈光效脉冲
-4. `300ms`：边框发光出现
-5. `400ms+`：粒子系统持续漂浮
+
+**GSAP Timeline 时序：**
+```
+t=0ms     : 背景遮罩 opacity 0→1，duration 200ms，ease "power2.out"
+t=100ms   : 弹窗 scale(0.8) opacity(0) → scale(1) opacity(1)，duration 300ms，ease "back.out(1.4)"
+t=200ms   : icon 外圈光效脉冲（scale 1→1.3→1，boxShadow 0→30px→0），duration 400ms，ease "power2.out"
+t=300ms   : 边框发光 opacity 0→1，boxShadow 增强，duration 300ms，ease "power2.out"
+t=400ms+  : 粒子系统持续漂浮（CSS animation loop，无限循环）
+```
+
+**各阶段详细参数：**
+| 阶段 | 属性 | 起始值 | 结束值 | 时长 | 缓动 |
+|------|------|--------|--------|------|------|
+| 遮罩 | opacity | 0 | 1 | 200ms | power2.out |
+| 弹窗缩放 | scale | 0.8 | 1 | 300ms | back.out(1.4) |
+| 弹窗透明度 | opacity | 0 | 1 | 300ms | power2.out |
+| icon脉冲 | scale | 1 | 1.3 | 200ms | power2.out |
+| icon脉冲 | scale | 1.3 | 1 | 200ms | power2.in |
+| icon光效 | boxShadow | 0 | 30px glow | 200ms | power2.out |
+| 边框发光 | opacity | 0 | 1 | 300ms | power2.out |
+| 边框光效 | boxShadow | base | enhanced | 300ms | power2.out |
+
+**传说级额外粒子：**
+- 弹窗打开后 200ms 开始金色粒子雨
+- 粒子从弹窗顶部向下飘落，持续循环
+- 每个粒子：直径 4px，opacity 0.6，下落速度 2-4s 随机，x轴微小偏移
 
 ### 3.5 关闭方式
 - X 按钮点击
