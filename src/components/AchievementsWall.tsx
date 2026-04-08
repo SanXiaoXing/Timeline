@@ -1,6 +1,7 @@
 import React, { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import AchievementCard from './AchievementCard';
+import AchievementModal from './AchievementModal';
 import type { Achievement, AchievementCategory } from '../contents/achievements';
 import { achievementCategoryLabels } from '../contents/achievements';
 
@@ -19,6 +20,8 @@ const AchievementsWall: React.FC<{ initialAchievements: Achievement[] }> = ({ in
   const [activeCategory, setActiveCategory] = useState<'all' | AchievementCategory>('all');
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
   const [achievements] = useState<Achievement[]>(initialAchievements);
+  const [selectedAchievement, setSelectedAchievement] = useState<Achievement | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const gridRef = useRef<HTMLDivElement | null>(null);
 
   useLayoutEffect(() => {
@@ -148,10 +151,22 @@ const AchievementsWall: React.FC<{ initialAchievements: Achievement[] }> = ({ in
       >
         {filtered.map(item => (
           <div key={item.id} className="min-h-[220px]">
-            <AchievementCard achievement={item} />
+            <AchievementCard
+              achievement={item}
+              onCardClick={(a) => {
+                setSelectedAchievement(a);
+                setIsModalOpen(true);
+              }}
+            />
           </div>
         ))}
       </div>
+
+      <AchievementModal
+        isOpen={isModalOpen}
+        achievement={selectedAchievement}
+        onClose={() => setIsModalOpen(false)}
+      />
     </div>
   );
 };
