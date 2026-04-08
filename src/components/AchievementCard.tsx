@@ -279,13 +279,51 @@ const AchievementCard: React.FC<AchievementCardProps> = ({ achievement, index = 
       >
         {achievement.unlocked && (
           <div
-            className="absolute inset-0 rounded-2xl opacity-50"
+            className={`absolute inset-0 rounded-2xl ${
+              achievement.rarity === 'rare' ? 'animate-pulse-glow' : ''
+            } ${
+              achievement.rarity === 'epic' ? 'animate-rotating-light' : ''
+            } ${
+              achievement.rarity === 'legendary' ? 'animate-gold-flame' : ''
+            }`}
             style={{
-              background: `linear-gradient(135deg, transparent 40%, ${theme.glow} 50%, transparent 60%)`,
-              backgroundSize: '200% 200%',
-              animation: 'shimmer 3s ease-in-out infinite'
+              background: achievement.rarity === 'epic' || achievement.rarity === 'legendary'
+                ? `linear-gradient(${achievement.rarity === 'legendary' ? '180deg' : '90deg'}, transparent 40%, ${theme.glow} 50%, transparent 60%)`
+                : achievement.rarity === 'rare'
+                ? 'none'
+                : `linear-gradient(135deg, transparent 40%, ${theme.glow} 50%, transparent 60%)`,
+              backgroundSize: achievement.rarity === 'rare' ? 'unset' : '200% 200%',
+              animation: achievement.rarity === 'common' ? 'shimmer 3s ease-in-out infinite' : undefined
             }}
           />
+        )}
+
+        {achievement.unlocked && achievement.rarity === 'epic' && (
+          <div
+            className="absolute inset-0 rounded-2xl animate-pulse-halo"
+            style={{
+              boxShadow: `inset 0 0 30px ${theme.glow}`,
+              animation: 'pulseHalo 3s ease-in-out infinite'
+            }}
+          />
+        )}
+
+        {achievement.unlocked && achievement.rarity === 'legendary' && (
+          <div className="absolute inset-0 rounded-2xl overflow-hidden pointer-events-none">
+            {Array.from({ length: 8 }, (_, i) => (
+              <div
+                key={i}
+                className="absolute w-1 h-1 rounded-full animate-particle-fall"
+                style={{
+                  left: `${10 + i * 12}%`,
+                  backgroundColor: '#f59e0b',
+                  boxShadow: '0 0 4px #f59e0b',
+                  animationDelay: `${i * 0.2}s`,
+                  animationDuration: `${1.5 + Math.random()}s`
+                }}
+              />
+            ))}
+          </div>
         )}
 
         <div className="relative z-10 h-full flex flex-col items-center justify-center p-4">
@@ -360,6 +398,53 @@ const AchievementCard: React.FC<AchievementCardProps> = ({ achievement, index = 
         @keyframes shine {
           0% { background-position: 200% 200%; }
           100% { background-position: -200% -200%; }
+        }
+        @keyframes pulseGlow {
+          0%, 100% { opacity: 0.3; }
+          50% { opacity: 0.8; }
+        }
+        @keyframes rotatingLight {
+          0% { background-position: 0% 50%; }
+          100% { background-position: 200% 50%; }
+        }
+        @keyframes goldFlame {
+          0% { background-position: 0% 0%; }
+          100% { background-position: 0% 100%; }
+        }
+        @keyframes pulseHalo {
+          0%, 100% { opacity: 0.3; box-shadow: inset 0 0 20px var(--glow-color); }
+          50% { opacity: 0.6; box-shadow: inset 0 0 40px var(--glow-color); }
+        }
+        @keyframes particleFall {
+          0% {
+            transform: translateY(-5px) translateX(0);
+            opacity: 0;
+          }
+          20% {
+            opacity: 0.8;
+          }
+          80% {
+            opacity: 0.8;
+          }
+          100% {
+            transform: translateY(180px) translateX(10px);
+            opacity: 0;
+          }
+        }
+        .animate-pulse-glow {
+          animation: pulseGlow 2s ease-in-out infinite;
+        }
+        .animate-rotating-light {
+          animation: rotatingLight 2s linear infinite;
+        }
+        .animate-gold-flame {
+          animation: goldFlame 1.5s linear infinite;
+        }
+        .animate-pulse-halo {
+          animation: pulseHalo 3s ease-in-out infinite;
+        }
+        .animate-particle-fall {
+          animation: particleFall 2s ease-in-out infinite;
         }
       `}</style>
     </div>
