@@ -139,3 +139,165 @@ Mode: Builder
 3. **你有品味**：选择极简文艺风格，而不是炫技的视觉效果，说明你理解"少即是多"的设计哲学。
 
 4. **你愿意彻底改变**：选择完全重写，而不是小修小补，说明你对这次重构有认真的态度，想要做出真正好的作品。
+
+## GSTACK REVIEW REPORT
+
+| Review | Trigger | Why | Runs | Status | Findings |
+|--------|---------|-----|------|--------|----------|
+| CEO Review | `/plan-ceo-review` | Scope & strategy | 1 | CLEAR | 6 issues resolved, 0 critical gaps |
+| Eng Review | `/plan-eng-review` | Architecture & tests (required) | 1 | CLEAR | 3 issues resolved, 0 critical gaps |
+
+### CEO Review Decisions
+
+| # | Decision | Choice | Impact |
+|---|----------|--------|--------|
+| D1 | 实现方案 | 渐进式重构 (A) | 保持现有组件结构，逐个重构视觉层 |
+| D2 | 审查模式 | 严守范围 (HOLD) | 聚焦于打磨方案，不做范围增减 |
+| D3 | 语录页面 | 保留语录页 | 纳入杂志风格设计 |
+| D4 | 图片策略 | 减少图片依赖 | 以排版和留白为主，降低性能风险 |
+| D5 | 设计系统 | 补充具体设计决策 | Phase 1 前解决开放问题 |
+| D6 | 无障碍 | 明确要求 | prefers-reduced-motion + 键盘导航 |
+| D7 | 叙事模式 | 定义叙事模式 | 页面底部「继续阅读」+ 首页精选 |
+| D8 | 空状态 | 明确空状态要求 | 未解锁/空数据有引导文案 |
+
+### Eng Review Decisions
+
+| # | Decision | Choice | Impact |
+|---|----------|--------|--------|
+| E1 | 设计令牌共享 | Tailwind 主题 + CSS 变量 | 通过 tailwind.config.mjs 统一定义，组件通过类名引用 |
+| E2 | 测试策略 | 轻量验收清单 | astro build + 手动视觉审查 + Lighthouse 审计 |
+| E3 | 字体加载 | 沿用现有模式 | 自托管 + font-display: swap（Layout.astro:16-28 模式） |
+| E4 | 数据模型冲突 | Phase 1 中解决 | 游戏化字段（rarity/progressPct）映射为杂志内容层级 |
+| E5 | GSAP 去留 | 保持方案不变 | 保留 GSAP，精简 ScrollSmoother 付费插件使用 |
+| E6 | 关于页面 | 新建内容集合 | 在 content/ 下新建 about 集合 |
+| E7 | 粒子背景 | 移除 LightBackground | Canvas 粒子与极简风格矛盾，用纯色背景替代 |
+
+### NOT in scope
+- 设计系统具体决策（字体/颜色/间距）→ Phase 1 中解决
+- 图片系统 → 排版留白为主，图片使用 Astro Image 组件优化
+- 关于页面内容 → 新建 content/about 集合，Phase 2 完成
+- 游戏化数据字段映射 → Phase 1 设计系统的一部分
+- motion/Remotion 依赖清理 → 不在本次重构范围，后续单独 PR
+
+### What already exists
+- 内容数据结构（achievements/projects/xing）→ 100% 复用，游戏化字段在 Phase 1 映射
+- prefers-reduced-motion 检测模式 → Layout.astro 已有，直接复用
+- Astro Content Collections → 保持不变
+- 路由结构 → 基本保留，新增 about 页面，保留 quotes 页面
+- 自托管字体 + font-display: swap 模式 → Layout.astro:16-28，直接复用
+
+### Dream state delta
+当前 → 渐进式重构 → 12 个月理想：有灵魂的数字自传
+- 本次：建立设计系统基础，重构核心页面视觉层，移除粒子背景
+- 差距：独特的设计语言、持续的内容积累 → 长期积累，非本次交付
+
+### Error & Rescue Registry
+静态站点，无后端服务。运行时风险：
+- GSAP 动画失败 → 降级模式（静态内容仍可见）
+- 图片加载失败 → 标准 `<img>` fallback（浏览器原生）
+- 内容构建失败 → Astro 构建时报错，不部署
+- 字体加载失败 → font-display: swap 回退到系统字体
+
+### Failure Modes Registry
+| Codepath | Failure Mode | Rescued? | Test? | User Sees? | Logged? |
+|----------|-------------|----------|-------|------------|---------|
+| GSAP ScrollTrigger | 动画初始化失败 | Y | N | 静态内容（无动画） | N |
+| Astro Content Collection | 构建时加载失败 | Y | Y (build) | 构建失败，不部署 | Y (build) |
+| React client:load | JS 加载失败 | Y | N | 静态 HTML（渐进增强） | N |
+| Web font load | 字体加载超时 | Y | N | 系统字体回退（swap） | N |
+
+```
+CODE PATHS                                            USER FLOWS
+[+] src/pages/index.astro                             [+] 首页浏览
+  ├── 精选内容展示                                      ├── [GAP] 空状态（无精选内容）
+  └── 「继续阅读」导航                                  └── [GAP] 导航到下一个逻辑节点
+
+[+] src/pages/achievements.astro                      [+] 成就浏览
+  ├── 成就列表渲染                                      ├── [GAP] 全部未解锁时的空状态
+  └── 稀有度 → 内容层级映射                             └── [GAP] 部分解锁时的视觉呈现
+
+[+] src/pages/projects.astro                          [+] 项目浏览
+  ├── 项目列表渲染                                      ├── [GAP] 无项目时的空状态
+  └── 项目详情页                                        └── [GAP] 项目无里程碑时
+
+[+] src/pages/xing.astro                              [+] 语录浏览
+  ├── 语录列表渲染                                      ├── [GAP] 无语录时的空状态
+  └── 时间线排列                                        └── [GAP] 单条语录时
+
+[+] src/layouts/Layout.astro                          [+] 全局体验
+  ├── 字体加载 (font-display: swap)                     ├── [TESTED] 字体回退到系统字体
+  ├── prefers-reduced-motion 检测                       ├── [TESTED] reduce motion 时动画停止
+  └── 移除 LightBackground 粒子                         └── [GAP] 验证纯色背景在移动端
+
+COVERAGE: 4/16 paths verified (25%)  |  Code paths: 2/6 (33%)  |  User flows: 2/10 (20%)
+QUALITY: ★★★:2 ★★:1 ★:1  |  GAPS: 12 (验收清单覆盖)
+```
+
+### Implementation Tasks
+Synthesized from CEO + Eng review findings.
+
+- [ ] **T1 (P1, human: ~1h / CC: ~10min)** — 设计系统 — 解决开放问题：确定字体（Playfair Display + Inter）、点缀色、12 列网格间距、游戏化字段映射
+  - Surfaced by: CEO Section 11 + Eng Section 2 + Outside Voice
+  - Files: `tailwind.config.mjs`, `src/layouts/Layout.astro`
+  - Verify: 设计 token 通过 Tailwind 主题 + CSS 变量共享
+
+- [ ] **T2 (P1, human: ~30min / CC: ~5min)** — 导航结构 — 更新 IA：首页/时间线/项目/语录/关于，5 页面可导航
+  - Surfaced by: CEO Section 11
+  - Files: `src/components/CardNav.tsx`, `src/pages/*.astro`
+  - Verify: 所有 5 个页面可导航到达
+
+- [ ] **T3 (P1, human: ~30min / CC: ~5min)** — 可访问性 — 保留 prefers-reduced-motion，键盘导航，语义化 HTML
+  - Surfaced by: CEO Section 4
+  - Files: `src/layouts/Layout.astro`, `src/components/*.tsx`
+  - Verify: 系统设置 reduce motion 后所有动画停止
+
+- [ ] **T4 (P1, human: ~30min / CC: ~5min)** — 字体加载 — 沿用 Layout.astro:16-28 自托管 + font-display: swap 模式
+  - Surfaced by: Eng Section 4
+  - Files: `src/layouts/Layout.astro`
+  - Verify: 字体加载失败时回退到系统字体，无 FOIT
+
+- [ ] **T5 (P1, human: ~30min / CC: ~5min)** — 移除粒子背景 — 删除 LightBackground.tsx 的 Canvas 粒子，用纯色背景替代
+  - Surfaced by: Outside Voice
+  - Files: `src/components/LightBackground.tsx`, `src/layouts/Layout.astro`
+  - Verify: 页面背景为纯色/渐变，GPU 占用降低
+
+- [ ] **T6 (P2, human: ~1h / CC: ~15min)** — 空状态 — 为每个页面设计空状态视觉呈现
+  - Surfaced by: CEO Section 11
+  - Files: `src/pages/achievements.astro`, `src/pages/xing.astro`, `src/pages/projects.astro`
+  - Verify: 空数据时页面不显突兀
+
+- [ ] **T7 (P2, human: ~1h / CC: ~15min)** — 叙事连接 — 实现页面间「继续阅读」机制和首页精选
+  - Surfaced by: CEO Section 11
+  - Files: `src/pages/index.astro`, `src/components/*.tsx`
+  - Verify: 每个页面底部有指向下一个逻辑节点的链接
+
+- [ ] **T8 (P2, human: ~30min / CC: ~5min)** — 图片策略 — Astro Image 组件 + sharp 依赖，WebP 自动转换
+  - Surfaced by: CEO Section 7 + Outside Voice
+  - Files: `astro.config.mjs`, `package.json`, `src/pages/*.astro`
+  - Verify: 构建后图片自动 WebP 转换 + 响应式 srcset
+
+- [ ] **T9 (P2, human: ~30min / CC: ~5min)** — 验收清单 — astro build + 手动视觉审查 + Lighthouse > 90
+  - Surfaced by: Eng Section 3
+  - Files: 全部
+  - Verify: 构建成功，5 页面视觉一致，Lighthouse > 90
+
+- [ ] **T10 (P3, human: ~1h / CC: ~15min)** — 关于页面 — 新建 content/about 集合，实现关于页面
+  - Surfaced by: Outside Voice
+  - Files: `src/content/about/`, `src/pages/about.astro`
+  - Verify: 关于页面可访问，内容可编辑
+
+### CODEX
+N/A (outside voice via Claude subagent — 10 findings, 4 adopted into plan)
+
+### CROSS-MODEL
+- **数据模型冲突**: Eng review 未发现。Outside voice 指出 achievement 数据中的 rarity/progressPct 与杂志风格矛盾。→ 采纳，Phase 1 中解决映射。
+- **GSAP 去留**: Eng review 未质疑。Outside voice 建议用 CSS 替代。→ 用户选择保持 GSAP。
+- **粒子背景**: Eng review 未发现。Outside voice 指出 LightBackground 与极简风格矛盾。→ 采纳，移除。
+- **关于页面阻塞**: Eng review 未发现。Outside voice 指出内容来源缺失。→ 采纳，新建 content/about 集合。
+- **motion 重复依赖 / Remotion 死代码**: Outside voice 发现。→ 不在本次范围，单独 PR。
+
+### VERDICT
+CEO + ENG CLEARED — 9 issues resolved, 0 critical gaps. Ready to implement.
+
+### UNRESOLVED
+0 unresolved decisions.

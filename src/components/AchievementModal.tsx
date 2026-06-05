@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from 'react';
-import { gsap } from 'gsap';
 import type { Achievement, AchievementRarity } from './AchievementCard';
 import { achievementRarityLabels } from './AchievementCard';
 
@@ -9,150 +8,15 @@ type AchievementModalProps = {
   onClose: () => void;
 };
 
-const rarityTheme: Record<
-  AchievementRarity,
-  {
-    border: string;
-    glow: string;
-    badgeBg: string;
-    badgeText: string;
-    pulseGlow: string;
-    gradient: string;
-    particleColor: string;
-  }
-> = {
-  common: {
-    border: 'rgba(16, 185, 129, 0.6)',
-    glow: 'rgba(16, 185, 129, 0.3)',
-    pulseGlow: 'rgba(16, 185, 129, 0.5)',
-    badgeBg: 'rgba(16, 185, 129, 0.15)',
-    badgeText: '#059669',
-    gradient: 'from-emerald-400/20 to-teal-400/20',
-    particleColor: '#10b981'
-  },
-  rare: {
-    border: 'rgba(14, 165, 233, 0.6)',
-    glow: 'rgba(14, 165, 233, 0.3)',
-    pulseGlow: 'rgba(14, 165, 233, 0.5)',
-    badgeBg: 'rgba(14, 165, 233, 0.15)',
-    badgeText: '#0284c7',
-    gradient: 'from-sky-400/20 to-cyan-400/20',
-    particleColor: '#0ea5e9'
-  },
-  epic: {
-    border: 'rgba(139, 92, 246, 0.6)',
-    glow: 'rgba(139, 92, 246, 0.3)',
-    pulseGlow: 'rgba(139, 92, 246, 0.5)',
-    badgeBg: 'rgba(139, 92, 246, 0.15)',
-    badgeText: '#7c3aed',
-    gradient: 'from-violet-400/20 to-purple-400/20',
-    particleColor: '#8b5cf6'
-  },
-  legendary: {
-    border: 'rgba(245, 158, 11, 0.8)',
-    glow: 'rgba(245, 158, 11, 0.4)',
-    pulseGlow: 'rgba(245, 158, 11, 0.6)',
-    badgeBg: 'rgba(245, 158, 11, 0.2)',
-    badgeText: '#d97706',
-    gradient: 'from-amber-400/30 to-orange-400/30',
-    particleColor: '#f59e0b'
-  }
-};
-
-const Particles: React.FC<{ rarity: AchievementRarity; count: number }> = ({ rarity, count }) => {
-  const particles = Array.from({ length: count }, (_, i) => ({
-    id: i,
-    left: `${Math.random() * 100}%`,
-    delay: `${Math.random() * 2}s`,
-    duration: `${2 + Math.random() * 2}s`,
-    size: rarity === 'legendary' ? `${3 + Math.random() * 3}px` : `${2 + Math.random() * 2}px`,
-    opacity: 0.4 + Math.random() * 0.4
-  }));
-
-  return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none rounded-2xl">
-      {particles.map(p => (
-        <div
-          key={p.id}
-          className="absolute rounded-full"
-          style={{
-            left: p.left,
-            top: '-10px',
-            width: p.size,
-            height: p.size,
-            backgroundColor: rarityTheme[rarity].particleColor,
-            opacity: p.opacity,
-            animation: `particleFall ${p.duration} ease-in-out ${p.delay} infinite`,
-            boxShadow: `0 0 6px ${rarityTheme[rarity].particleColor}`
-          }}
-        />
-      ))}
-      <style>{`
-        @keyframes particleFall {
-          0% {
-            transform: translateY(-10px) translateX(0) rotate(0deg);
-            opacity: 0;
-          }
-          10% {
-            opacity: 0.6;
-          }
-          90% {
-            opacity: 0.6;
-          }
-          100% {
-            transform: translateY(400px) translateX(${rarity === 'legendary' ? '20px' : '10px'}) rotate(${rarity === 'legendary' ? '360deg' : '180deg'});
-            opacity: 0;
-          }
-        }
-      `}</style>
-    </div>
-  );
+const rarityTheme: Record<AchievementRarity, { border: string; bg: string; text: string }> = {
+  common:    { border: '#059669', bg: 'rgba(16,185,129,0.06)', text: '#059669' },
+  rare:      { border: '#0284c7', bg: 'rgba(14,165,233,0.06)', text: '#0284c7' },
+  epic:      { border: '#7c3aed', bg: 'rgba(139,92,246,0.06)', text: '#7c3aed' },
+  legendary: { border: '#d97706', bg: 'rgba(245,158,11,0.06)', text: '#d97706' },
 };
 
 const AchievementModal: React.FC<AchievementModalProps> = ({ achievement, isOpen, onClose }) => {
   const modalRef = useRef<HTMLDivElement>(null);
-  const backdropRef = useRef<HTMLDivElement>(null);
-  const iconRef = useRef<HTMLDivElement>(null);
-  const timelineRef = useRef<gsap.core.Timeline | null>(null);
-
-  useEffect(() => {
-    if (!isOpen || !achievement) return;
-
-    const theme = rarityTheme[achievement.rarity];
-
-    timelineRef.current?.kill();
-
-    const tl = gsap.timeline();
-
-    tl.fromTo(backdropRef.current,
-      { opacity: 0 },
-      { opacity: 1, duration: 0.2, ease: 'power2.out' }
-    )
-    .fromTo(modalRef.current,
-      { scale: 0.8, opacity: 0 },
-      { scale: 1, opacity: 1, duration: 0.3, ease: 'back.out(1.4)' },
-      '-=0.1'
-    )
-    .fromTo(iconRef.current,
-      { scale: 1 },
-      { scale: 1.3, duration: 0.2, ease: 'power2.out' },
-      '-=0.1'
-    )
-    .to(iconRef.current,
-      { scale: 1, duration: 0.2, ease: 'power2.in' }
-    )
-    .fromTo(modalRef.current,
-      { boxShadow: `0 0 0 ${theme.glow}` },
-      { boxShadow: `0 0 40px ${theme.glow}, 0 0 80px ${theme.glow}`, duration: 0.3, ease: 'power2.out' },
-      '-=0.2'
-    );
-
-    timelineRef.current = tl;
-
-    return () => {
-      tl.kill();
-    };
-  }, [isOpen, achievement]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -160,7 +24,6 @@ const AchievementModal: React.FC<AchievementModalProps> = ({ achievement, isOpen
         onClose();
       }
     };
-
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, onClose]);
@@ -179,118 +42,124 @@ const AchievementModal: React.FC<AchievementModalProps> = ({ achievement, isOpen
   if (!isOpen || !achievement) return null;
 
   const theme = rarityTheme[achievement.rarity];
-  const particleCount = achievement.rarity === 'legendary' ? 30 : achievement.rarity === 'epic' ? 15 : achievement.rarity === 'rare' ? 8 : 0;
 
   return (
     <div
-      ref={backdropRef}
       className="fixed inset-0 z-50 flex items-center justify-center p-4"
-      style={{ backgroundColor: 'rgba(0, 0, 0, 0.7)', backdropFilter: 'blur(8px)' }}
+      style={{ backgroundColor: 'rgba(44, 54, 57, 0.65)', backdropFilter: 'blur(6px)' }}
       onClick={onClose}
     >
       <div
         ref={modalRef}
-        className={`relative w-full max-w-md rounded-2xl border-2 backdrop-blur-md overflow-hidden ${
-          achievement.unlocked
-            ? `bg-gradient-to-br ${theme.gradient}`
-            : 'bg-neutral-200/90 grayscale'
-        }`}
+        className="relative w-full max-w-lg overflow-hidden"
         style={{
-          borderColor: achievement.unlocked ? theme.border : 'rgba(0,0,0,0.2)',
-          boxShadow: achievement.unlocked
-            ? `0 0 20px ${theme.glow}`
-            : '0 4px 20px rgba(0,0,0,0.1)',
-          opacity: 1,
-          scale: 1
+          backgroundColor: '#F6F2EB',
+          borderTop: `3px solid ${theme.border}`,
         }}
         onClick={e => e.stopPropagation()}
       >
-        {achievement.unlocked && particleCount > 0 && (
-          <Particles rarity={achievement.rarity} count={particleCount} />
-        )}
+        {/* Grain texture */}
+        <div
+          className="absolute inset-0 z-0 pointer-events-none opacity-[0.025]"
+          style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E")`,
+            backgroundRepeat: 'repeat',
+            backgroundSize: '128px 128px',
+          }}
+        />
 
-        <div className="relative z-10 p-6">
+        <div className="relative z-10 p-8 md:p-10">
+          {/* Close button — editorial style */}
           <button
             onClick={onClose}
-            className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/30 hover:bg-white/50 flex items-center justify-center transition-colors"
+            className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center transition-colors duration-200 hover:bg-card group"
+            aria-label="Close"
           >
-            <svg className="w-4 h-4 text-neutral-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="w-4 h-4 text-muted group-hover:text-primary transition-colors duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
 
-          <div className="flex flex-col items-center text-center">
-            <div
-              ref={iconRef}
-              className={`w-20 h-20 rounded-2xl flex items-center justify-center text-4xl border-2 mb-4 ${
-                achievement.unlocked ? 'bg-white/80' : 'bg-neutral-300/50'
-              }`}
-              style={{
-                borderColor: achievement.unlocked ? theme.border : 'rgba(0,0,0,0.1)',
-                boxShadow: achievement.unlocked ? `0 0 30px ${theme.glow}` : 'none'
-              }}
-            >
-              <span style={!achievement.unlocked ? { filter: 'grayscale(100%)', opacity: 0.5 } : {}}>
-                {achievement.icon}
-              </span>
-            </div>
-
-            <h2 className={`text-xl font-bold mb-2 ${achievement.unlocked ? 'text-neutral-800' : 'text-neutral-500'}`}>
-              {achievement.name}
-            </h2>
-
+          {/* Rarity folio marker */}
+          <div className="mb-8">
             <span
-              className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border mb-4"
+              className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] px-2 py-0.5"
               style={{
-                borderColor: achievement.unlocked ? theme.border : 'rgba(0,0,0,0.1)',
-                color: achievement.unlocked ? theme.badgeText : '#999',
-                backgroundColor: achievement.unlocked ? theme.badgeBg : 'rgba(0,0,0,0.05)',
-                opacity: achievement.unlocked ? 1 : 0.5
+                color: theme.text,
+                backgroundColor: theme.bg,
+                borderBottom: `1px solid ${theme.border}`,
+                opacity: achievement.unlocked ? 1 : 0.5,
               }}
             >
               {achievementRarityLabels[achievement.rarity]}
             </span>
+          </div>
 
-            <div className={`w-full h-px my-4 ${achievement.unlocked ? 'bg-neutral-200/50' : 'bg-neutral-300/50'}`} />
+          {/* Icon — large editorial display */}
+          <div
+            className="mb-6"
+            style={{
+              fontSize: '4rem',
+              lineHeight: 1,
+              opacity: achievement.unlocked ? 1 : 0.5,
+              filter: achievement.unlocked ? 'none' : 'grayscale(100%)',
+            }}
+          >
+            {achievement.icon}
+          </div>
 
-            <p className={`text-sm leading-relaxed mb-4 ${achievement.unlocked ? 'text-neutral-600' : 'text-neutral-400'}`}>
-              {achievement.description}
-            </p>
+          {/* Name — editorial headline */}
+          <h2
+            className="font-display text-2xl md:text-3xl text-primary font-normal leading-tight mb-4"
+            style={{ letterSpacing: '-0.01em' }}
+          >
+            {achievement.name}
+          </h2>
 
-            <div className={`text-xs ${achievement.unlocked ? 'text-neutral-500' : 'text-neutral-400'}`}>
-              {achievement.unlocked && achievement.unlockedAt ? (
-                <div className="flex items-center justify-center gap-2">
-                  <span>解锁时间</span>
-                  <span className="font-mono">{achievement.unlockedAt.split(' ')[0]}</span>
+          {/* Divider */}
+          <div className="w-full h-px my-6 bg-divider" />
+
+          {/* Description — editorial body */}
+          <p className="text-base text-muted leading-relaxed mb-8 max-w-[50ch]">
+            {achievement.description}
+          </p>
+
+          {/* Bottom info — editorial footnote */}
+          <div
+            className="pt-6 flex items-center justify-between"
+            style={{ borderTop: '1px solid #E5DFD6' }}
+          >
+            {achievement.unlocked && achievement.unlockedAt ? (
+              <>
+                <span className="font-mono text-[10px] uppercase tracking-wider" style={{ color: theme.text }}>
+                  Unlocked
+                </span>
+                <span className="font-mono text-xs tabular-nums text-muted">
+                  {achievement.unlockedAt.split(' ')[0]}
+                </span>
+              </>
+            ) : (
+              <>
+                <span className="text-xs text-muted">当前进度</span>
+                <div className="flex items-center gap-3">
+                  <div className="w-24 h-[2px] overflow-hidden" style={{ backgroundColor: '#E5DFD6' }}>
+                    <div
+                      className="h-full"
+                      style={{
+                        width: `${achievement.progressPct}%`,
+                        backgroundColor: theme.border,
+                        transition: 'width 0.7s ease-out',
+                      }}
+                    />
+                  </div>
+                  <span className="font-mono text-xs font-bold tabular-nums" style={{ color: theme.text }}>
+                    {achievement.progressPct}%
+                  </span>
                 </div>
-              ) : (
-                <div className="flex items-center justify-center gap-2">
-                  <span>当前进度</span>
-                  <span className="font-mono font-bold" style={{ color: theme.badgeText }}>{achievement.progressPct}%</span>
-                </div>
-              )}
-            </div>
+              </>
+            )}
           </div>
         </div>
-
-        <style>{`
-          @keyframes particleFall {
-            0% {
-              transform: translateY(-10px) translateX(0) rotate(0deg);
-              opacity: 0;
-            }
-            10% {
-              opacity: 0.6;
-            }
-            90% {
-              opacity: 0.6;
-            }
-            100% {
-              transform: translateY(400px) translateX(10px) rotate(180deg);
-              opacity: 0;
-            }
-          }
-        `}</style>
       </div>
     </div>
   );

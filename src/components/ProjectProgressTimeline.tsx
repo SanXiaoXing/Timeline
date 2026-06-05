@@ -1,5 +1,4 @@
-import React, { useLayoutEffect, useMemo, useRef } from 'react';
-import { gsap } from 'gsap';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import type { ProjectMilestone, ProjectTimelineItem } from '../contents/projects/types';
 
 export type ProjectProgressTimelineProps = {
@@ -7,154 +6,295 @@ export type ProjectProgressTimelineProps = {
   milestones: ProjectMilestone[];
   timeline: ProjectTimelineItem[];
   activeMilestoneId: string | null;
-  onItemEnter: (milestoneId: string) => void;
-  onItemLeave: () => void;
   onItemSelect: (milestoneId: string) => void;
 };
 
 const clamp = (n: number, min: number, max: number) => Math.min(max, Math.max(min, n));
+
+function useScrollReveal(threshold = 0.15) {
+  const ref = useRef<HTMLDivElement | null>(null);
+  const [visibleItems, setVisibleItems] = useState<Set<string>>(new Set());
+
+  useEffect(() => {
+    const container = ref.current;
+    if (!container) return;
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) {
+      const all = container.querySelectorAll('[data-reveal]');
+      setVisibleItems(new Set(Array.from(all).map(el => el.getAttribute('data-reveal')!)));
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        setVisibleItems(prev => {
+          const next = new Set(prev);
+          entries.forEach(entry => {
+            const id = entry.target.getAttribute('data-reveal');
+            if (id && entry.isIntersecting) {
+              next.add(id);
+            }
+          });
+          return next;
+        });
+      },
+      { threshold, rootMargin: '0px 0px -40px 0px' }
+    );
+
+    const items = container.querySelectorAll('[data-reveal]');
+    items.forEach(el => observer.observe(el));
+
+    return () => observer.disconnect();
+  }, [threshold]);
+
+  return { ref, visibleItems };
+}
+
+function formatDateCN(dateStr: string): { year: string; month: string; day: string } {
+  const d = new Date(dateStr);
+  return {
+    year: String(d.getFullYear()),
+    month: String(d.getMonth() + 1).padStart(2, '0'),
+    day: String(d.getDate()).padStart(2, '0'),
+  };
+}
 
 const ProjectProgressTimeline: React.FC<ProjectProgressTimelineProps> = ({
   actualProgressPct,
   milestones,
   timeline,
   activeMilestoneId,
-  onItemEnter,
-  onItemLeave,
   onItemSelect
 }) => {
-  const rootRef = useRef<HTMLDivElement | null>(null);
   const pct = useMemo(() => clamp(actualProgressPct, 0, 100), [actualProgressPct]);
   const milestoneById = useMemo(() => new Map(milestones.map(m => [m.id, m])), [milestones]);
+  const { ref: revealRef, visibleItems } = useScrollReveal(0.12);
 
-  useLayoutEffect(() => {
-    const root = rootRef.current;
-    if (!root) return;
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    const cards = Array.from(root.querySelectorAll('[data-timeline-card]')) as HTMLElement[];
-    gsap.killTweensOf(cards);
-    gsap.set(cards, { opacity: 0, y: 10 });
-    const tween = gsap.to(cards, { opacity: 1, y: 0, duration: 0.35, ease: 'power2.out', stagger: 0.05 });
-    return () => {
-      tween.kill();
-      gsap.killTweensOf(cards);
-    };
-  }, [timeline.length]);
+  const unlockedCount = useMemo(
+    () => milestones.filter(m => pct >= m.pct).length,
+    [milestones, pct]
+  );
 
   return (
-    <div
-      ref={rootRef}
-      className="rounded-2xl border border-neutral-200/50 bg-white/70 backdrop-blur-xl overflow-hidden flex flex-col shadow-xl shadow-neutral-100/30"
-    >
-      <div className="p-6 md:p-8 border-b border-neutral-200/30 bg-white/50">
-        <div className="flex items-end justify-between gap-6">
+    <div ref={revealRef}>
+      {/* Magazine section header */}
+      <div className="mb-16 md:mb-20">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div>
-            <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-md bg-indigo-500/10 border border-indigo-200/50 mb-4">
-              <span className="text-[10px] font-semibold text-indigo-600 uppercase tracking-wider">Quest Log</span>
-            </div>
-            <div className="text-2xl font-bold text-neutral-800 tracking-tight">
-              Timeline <span className="text-neutral-400 font-light">/ Milestones</span>
+            <p className="font-mono text-xs tracking-[0.2em] uppercase text-accent mb-4">Timeline</p>
+            <h2 className="font-display text-3xl md:text-4xl text-primary font-normal leading-[1.15]">
+              开发日志
+            </h2>
+            <p className="mt-3 text-muted text-sm leading-relaxed max-w-[40ch]">
+              共 {milestones.length} 个里程碑，已完成 {unlockedCount} 个
+            </p>
+          </div>
+
+          {/* Overall progress */}
+          <div className="flex items-end gap-10">
+            <div className="flex flex-col items-end">
+              <span className="font-display text-4xl md:text-5xl text-accent tabular-nums leading-none">
+                {pct}%
+              </span>
+              <span className="text-xs text-muted mt-2 font-medium uppercase tracking-wider">总进度</span>
             </div>
           </div>
-          <div className="hidden md:block text-right">
-            <div className="text-[10px] font-semibold text-neutral-400 uppercase tracking-wider mb-1">Current Progress</div>
-            <div className="text-2xl font-bold text-indigo-500" style={{ fontFamily: "'Emblema One', cursive" }}>{pct}%</div>
-          </div>
+        </div>
+
+        {/* Progress bar */}
+        <div className="mt-8 h-[2px] w-full overflow-hidden" style={{ backgroundColor: '#E5DFD6' }}>
+          <div
+            className="h-full origin-left"
+            style={{
+              backgroundColor: '#D45D4A',
+              transform: `scaleX(${pct / 100})`,
+              transition: 'transform 1s cubic-bezier(0.16, 1, 0.3, 1)',
+            }}
+          />
         </div>
       </div>
 
-      <div className="p-6 md:p-10 flex-1 overflow-y-auto">
-        <div className="relative border-l border-neutral-200/50 ml-32 md:ml-48 space-y-12 pb-8">
-          {timeline.map((item) => {
+      {/* Timeline items */}
+      <div className="relative">
+        {/* Vertical line */}
+        <div className="absolute left-0 md:left-0 top-0 bottom-0 w-px" style={{ backgroundColor: '#E5DFD6' }} />
+
+        <div className="space-y-0">
+          {timeline.map((item, index) => {
             const milestone = milestoneById.get(item.milestoneId);
             const milestonePct = milestone?.pct ?? 0;
             const unlocked = pct >= milestonePct;
             const active = activeMilestoneId === item.milestoneId;
+            const isVisible = visibleItems.has(item.id);
+            const date = formatDateCN(item.date);
+
             return (
-              <button
+              <div
                 key={item.id}
-                type="button"
-                className="relative pl-8 md:pl-12 text-left w-full group outline-none"
-                onMouseEnter={() => onItemEnter(item.milestoneId)}
-                onMouseLeave={onItemLeave}
-                onFocus={() => onItemEnter(item.milestoneId)}
-                onBlur={onItemLeave}
-                onClick={() => onItemSelect(item.milestoneId)}
-                data-magnetic
+                data-reveal={item.id}
+                className="relative"
+                style={{
+                  opacity: isVisible ? 1 : 0,
+                  transform: isVisible ? 'translateY(0)' : 'translateY(24px)',
+                  transition: `opacity 0.6s ease-out ${index * 0.08}s, transform 0.6s ease-out ${index * 0.08}s`,
+                }}
               >
-                {/* Date on the Left */}
-                <div className="absolute -left-32 md:-left-48 top-0.5 w-28 md:w-44 text-right pr-4 md:pr-10">
-                  <div
-                    className={`text-sm md:text-lg tracking-tight transition-all duration-300 leading-none whitespace-nowrap ${active ? 'text-indigo-500 scale-110 origin-right' : 'text-neutral-400'}`}
-                    style={{ fontFamily: "'Emblema One', cursive" }}
-                  >
-                    {item.date}
-                  </div>
-                </div>
-
-                {/* Timeline Dot */}
+                {/* Dot on timeline */}
                 <div
-                  className={`absolute -left-[13px] top-1.5 flex h-6 w-6 items-center justify-center rounded-full border-2 transition-all duration-300 bg-white z-10 ${
-                    unlocked ? 'border-emerald-400' : 'border-neutral-300'
-                  } ${active ? 'scale-125 ring-4 ring-indigo-200/50 border-indigo-400 shadow-[0_0_15px_rgba(99,102,241,0.3)]' : 'group-hover:scale-110'}`}
-                >
-                  <div className={`w-2 h-2 rounded-full ${unlocked ? 'bg-emerald-400' : 'bg-neutral-300'} ${active ? 'bg-indigo-400' : ''}`} />
-                </div>
+                  className="absolute left-0 top-0 -translate-x-1/2 z-10 transition-all duration-300"
+                  style={{
+                    width: active ? '14px' : '10px',
+                    height: active ? '14px' : '10px',
+                    backgroundColor: unlocked ? '#D45D4A' : '#E5DFD6',
+                    border: unlocked ? '2px solid #D45D4A' : '2px solid #E5DFD6',
+                    marginTop: '2.1rem',
+                  }}
+                />
 
-                <div
-                  data-timeline-card
-                  className={`rounded-xl border p-5 md:p-6 transition-all duration-300 ${
-                    unlocked ? 'border-neutral-200/50 bg-white/60' : 'border-neutral-200/30 bg-transparent opacity-60'
-                  } ${active ? 'border-indigo-400/50 bg-indigo-50/50 shadow-[0_0_20px_rgba(99,102,241,0.1)]' : 'group-hover:border-neutral-300/50 group-hover:bg-white/80 group-hover:shadow-lg'}`}
+                <button
+                  type="button"
+                  className="relative pl-8 md:pl-12 w-full text-left block outline-none group cursor-pointer"
+                  onClick={() => onItemSelect(item.milestoneId)}
                 >
-                  <div className="flex items-center justify-between gap-6">
-                    <div className="min-w-0 flex-1">
-                      <div className={`font-bold text-lg md:text-xl truncate transition-colors duration-300 ${active ? 'text-indigo-600' : 'text-neutral-800'}`}>
-                        {item.title}
-                      </div>
-                      <div className="mt-2 flex items-center gap-3 text-xs md:text-sm text-neutral-500 uppercase tracking-wider font-semibold">
-                        <span className={active ? 'text-indigo-500' : 'text-neutral-500'}>
+                  {/* Magazine layout: date row + content row */}
+                  <div className="py-6 md:py-8">
+                    {/* Date — large magazine display */}
+                    <div className="flex items-baseline gap-2 mb-4">
+                      <span className="font-display text-5xl md:text-6xl lg:text-7xl text-primary tabular-nums leading-none tracking-tight">
+                        {date.month}.{date.day}
+                      </span>
+                      <span className="font-display text-2xl md:text-3xl text-muted font-light">
+                        {date.year}
+                      </span>
+                      <span className="ml-3 inline-flex items-center gap-1.5">
+                        <span
+                          className="inline-block w-1 h-1"
+                          style={{ backgroundColor: unlocked ? '#4A6B5F' : '#E5DFD6' }}
+                        />
+                        <span className="font-mono text-[10px] text-muted uppercase tracking-widest">
                           {milestone?.label ?? 'MILESTONE'}
                         </span>
-                        <span className="text-neutral-300">•</span>
-                        <span className="text-indigo-500/80" style={{ fontFamily: "'Emblema One', cursive" }}>{milestonePct}%</span>
-                      </div>
+                      </span>
                     </div>
-                    <div className={`shrink-0 flex items-center justify-center w-8 h-8 rounded-full border transition-all duration-300 ${
-                      active ? 'border-indigo-400/50 text-indigo-500 bg-indigo-500/10 rotate-90' : 'border-neutral-200 text-neutral-400 group-hover:text-neutral-600 group-hover:border-neutral-300'
-                    }`}>
-                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                      </svg>
-                    </div>
-                  </div>
 
-                  <div className={`grid transition-all duration-500 ease-in-out ${active ? 'grid-rows-[1fr] opacity-100 mt-6' : 'grid-rows-[0fr] opacity-0'}`}>
-                    <div className="overflow-hidden">
-                      <div className="border-t border-neutral-200/30 pt-6 space-y-6">
-                        {milestone?.description ? (
-                          <div className="text-sm md:text-base text-indigo-600/90 leading-relaxed italic bg-indigo-50/50 p-4 rounded-lg border border-indigo-200/30">
-                            {milestone.description}
+                    {/* Content */}
+                    <div
+                      className="transition-all duration-300"
+                      style={{
+                        backgroundColor: active ? '#F0EBE3' : 'transparent',
+                        borderLeft: active ? '3px solid #D45D4A' : '1px solid transparent',
+                        opacity: unlocked ? 1 : 0.5,
+                        padding: active ? '1.5rem' : '0',
+                        paddingLeft: active ? '1.5rem' : '0',
+                      }}
+                    >
+                      <div className="flex items-start justify-between gap-6">
+                        <div className="min-w-0 flex-1">
+                          <h3
+                            className="font-display text-xl md:text-2xl text-primary leading-tight group-hover:text-accent transition-colors duration-200"
+                            style={{
+                              opacity: isVisible ? 1 : 0,
+                              transform: isVisible ? 'translateY(0)' : 'translateY(12px)',
+                              transition: `opacity 0.5s ease-out ${index * 0.08 + 0.1}s, transform 0.5s ease-out ${index * 0.08 + 0.1}s`,
+                            }}
+                          >
+                            {item.title}
+                          </h3>
+
+                          {/* Expand indicator */}
+                          <div
+                            className="mt-3 flex items-center gap-2"
+                            style={{
+                              opacity: isVisible ? 1 : 0,
+                              transform: isVisible ? 'translateY(0)' : 'translateY(8px)',
+                              transition: `opacity 0.5s ease-out ${index * 0.08 + 0.2}s, transform 0.5s ease-out ${index * 0.08 + 0.2}s`,
+                            }}
+                          >
+                            <span className="text-xs text-muted opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                              {active ? '收起' : '点击展开'}
+                            </span>
+                            <svg
+                              className="w-3.5 h-3.5 text-muted transition-transform duration-300"
+                              style={{ transform: active ? 'rotate(180deg)' : 'rotate(0deg)' }}
+                              fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                            >
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                            </svg>
                           </div>
-                        ) : null}
-
-                        <div className="text-base md:text-lg leading-relaxed text-neutral-600 font-light">
-                          {item.detail}
                         </div>
 
-                        {item.result ? (
-                          <div className="mt-6 border-l-4 border-indigo-400/50 pl-4 py-2 text-base md:text-lg text-neutral-700 bg-indigo-50/30 rounded-r-lg">
-                            <span className="text-xs font-bold text-indigo-500 uppercase tracking-widest block mb-2">Result</span>
-                            {item.result}
+                        <span
+                          className="shrink-0 font-mono text-sm text-accent tabular-nums mt-1"
+                          style={{
+                            opacity: isVisible ? 1 : 0,
+                            transition: `opacity 0.5s ease-out ${index * 0.08 + 0.15}s`,
+                          }}
+                        >
+                          {milestonePct}%
+                        </span>
+                      </div>
+
+                      {/* Expanded content */}
+                      <div
+                        className="grid transition-all duration-500 ease-in-out"
+                        style={{
+                          gridTemplateRows: active ? '1fr' : '0fr',
+                          opacity: active ? 1 : 0,
+                          marginTop: active ? '1.5rem' : '0',
+                        }}
+                      >
+                        <div className="overflow-hidden">
+                          <div className="space-y-6" style={{ borderTop: '1px solid #E5DFD6', paddingTop: '1.5rem' }}>
+                            {milestone?.description ? (
+                              <div
+                                className="text-sm md:text-base text-primary leading-relaxed italic p-4"
+                                style={{ backgroundColor: '#F6F2EB', borderLeft: '2px solid #D45D4A' }}
+                              >
+                                {milestone.description}
+                              </div>
+                            ) : null}
+
+                            <div className="text-base md:text-lg leading-relaxed text-muted font-light">
+                              {item.detail}
+                            </div>
+
+                            {item.result ? (
+                              <div
+                                className="pl-4 py-2 text-base md:text-lg text-primary"
+                                style={{ borderLeft: '3px solid #4A6B5F' }}
+                              >
+                                <span className="font-mono text-[10px] font-bold tracking-widest uppercase mb-2 block" style={{ color: '#4A6B5F' }}>
+                                  Result
+                                </span>
+                                {item.result}
+                              </div>
+                            ) : null}
                           </div>
-                        ) : null}
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              </button>
+                </button>
+              </div>
             );
           })}
+        </div>
+
+        {/* End marker */}
+        <div className="relative pl-8 md:pl-12 py-8">
+          <div
+            className="absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10"
+            style={{
+              width: '10px',
+              height: '10px',
+              backgroundColor: '#D45D4A',
+              border: '2px solid #D45D4A',
+            }}
+          />
+          <p className="font-display text-lg text-muted italic">
+            Fin.
+          </p>
         </div>
       </div>
     </div>

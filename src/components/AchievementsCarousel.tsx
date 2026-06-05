@@ -1,6 +1,5 @@
 import React, { useLayoutEffect, useMemo, useRef } from 'react';
-import { gsap } from 'gsap';
-import type { Achievement } from '../contents/achievements';
+import type { Achievement } from './AchievementCard';
 import AchievementCard from './AchievementCard';
 
 const AchievementsCarousel: React.FC<{ initialAchievements: Achievement[] }> = ({ initialAchievements }) => {
@@ -8,80 +7,74 @@ const AchievementsCarousel: React.FC<{ initialAchievements: Achievement[] }> = (
   const trackRef = useRef<HTMLDivElement | null>(null);
   const firstSetRef = useRef<HTMLDivElement | null>(null);
   const pausedRef = useRef(false);
-  const stateRef = useRef<{ x: number; singleWidth: number; wrap: ((v: number) => number) | null }>({
-    x: 0,
-    singleWidth: 0,
-    wrap: null
-  });
+  const animRef = useRef<number | null>(null);
+  const xRef = useRef(0);
+  const widthRef = useRef(0);
 
   const unlocked = useMemo(() => initialAchievements.filter(a => a.unlocked), [initialAchievements]);
 
   useLayoutEffect(() => {
     const track = trackRef.current;
-    if (!track) return;
+    const first = firstSetRef.current;
+    if (!track || !first) return;
 
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-    const setX = gsap.quickSetter(track, 'x', 'px');
     const measure = () => {
-      const first = firstSetRef.current;
-      if (!first) return;
       const rect = first.getBoundingClientRect();
-      const width = rect.width;
-      if (!Number.isFinite(width) || width <= 0) return;
-      const wrap = gsap.utils.wrap(-width, 0);
-      stateRef.current.singleWidth = width;
-      stateRef.current.wrap = wrap;
-      stateRef.current.x = wrap(stateRef.current.x);
-      setX(stateRef.current.x);
+      widthRef.current = rect.width;
+      xRef.current = 0;
+      track.style.transform = 'translateX(0)';
     };
-
-    gsap.set(track, { x: 0, force3D: true });
-    stateRef.current.x = 0;
     measure();
     window.addEventListener('resize', measure);
 
     let lastTime = 0;
-    const speed = 70;
+    const speed = 0.04; // px per ms
+
     const tick = (time: number) => {
       if (!lastTime) lastTime = time;
       const dt = time - lastTime;
       lastTime = time;
-      if (pausedRef.current) return;
+      if (pausedRef.current || widthRef.current <= 0) {
+        animRef.current = requestAnimationFrame(tick);
+        return;
+      }
 
-      const { singleWidth, wrap } = stateRef.current;
-      if (!wrap || singleWidth <= 0) return;
-      stateRef.current.x = wrap(stateRef.current.x - speed * dt);
-      setX(stateRef.current.x);
+      xRef.current -= speed * dt;
+      if (xRef.current <= -widthRef.current) {
+        xRef.current += widthRef.current;
+      }
+      track.style.transform = `translateX(${xRef.current}px)`;
+      animRef.current = requestAnimationFrame(tick);
     };
-    gsap.ticker.add(tick);
+    animRef.current = requestAnimationFrame(tick);
 
     return () => {
       window.removeEventListener('resize', measure);
-      gsap.ticker.remove(tick);
+      if (animRef.current) cancelAnimationFrame(animRef.current);
     };
   }, []);
 
   if (unlocked.length === 0) return null;
 
   return (
-    <section className="mx-auto max-w-7xl px-4 py-16 md:py-24">
-      <div className="mb-12 flex flex-col md:flex-row items-start md:items-end justify-between gap-4">
+    <section className="mx-auto max-w-content px-4 py-16 md:py-24">
+      <div className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight text-neutral-800 md:text-4xl">
-            Latest <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-cyan-500">Achievements</span>
+          <h2 className="font-display text-3xl md:text-4xl text-primary font-normal leading-[1.2]">
+            最新成就
           </h2>
-          <p className="mt-3 text-sm text-neutral-500 md:text-base font-light">
-            Recent milestones and accomplishments.
+          <p className="mt-2 text-sm text-muted">
+            最近的里程碑与成就。
           </p>
         </div>
         <a
           href="/achievements"
-          className="group inline-flex items-center gap-2 rounded-full border border-neutral-200/50 bg-white/50 px-5 py-2.5 text-sm font-medium text-neutral-600 transition-all duration-300 hover:bg-white hover:text-neutral-800 hover:shadow-lg hover:shadow-indigo-100/50 backdrop-blur-sm"
-          data-magnetic
+          className="group inline-flex items-center gap-2 text-sm text-muted hover:text-link transition-colors duration-200"
         >
-          View All
-          <svg className="h-4 w-4 transform transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          查看全部
+          <svg className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
           </svg>
         </a>
@@ -89,29 +82,30 @@ const AchievementsCarousel: React.FC<{ initialAchievements: Achievement[] }> = (
 
       <div
         ref={viewportRef}
-        className="relative overflow-hidden rounded-2xl border border-neutral-200/50 bg-white/50 backdrop-blur-sm"
-        onMouseEnter={() => {
-          pausedRef.current = true;
-        }}
-        onMouseLeave={() => {
-          pausedRef.current = false;
-        }}
+        className="relative overflow-hidden"
+        onMouseEnter={() => { pausedRef.current = true; }}
+        onMouseLeave={() => { pausedRef.current = false; }}
       >
-        <div className="pointer-events-none absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-neutral-50 to-transparent z-[2]" />
-        <div className="pointer-events-none absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-neutral-50 to-transparent z-[2]" />
+        {/* Fade edges */}
+        <div className="pointer-events-none absolute inset-y-0 left-0 w-16 z-[2]"
+          style={{ background: 'linear-gradient(to right, #F6F2EB, transparent)' }}
+        />
+        <div className="pointer-events-none absolute inset-y-0 right-0 w-16 z-[2]"
+          style={{ background: 'linear-gradient(to left, #F6F2EB, transparent)' }}
+        />
 
         <div className="py-5">
-          <div ref={trackRef} className="flex w-max items-stretch px-5">
+          <div ref={trackRef} className="flex w-max items-stretch" style={{ willChange: 'transform' }}>
             <div ref={firstSetRef} className="flex items-stretch gap-4 pr-4">
               {unlocked.map(a => (
-                <div key={a.id} className="w-[320px] md:w-[360px] lg:w-[405px] xl:w-[420px] shrink-0">
+                <div key={a.id} className="w-[320px] md:w-[360px] lg:w-[400px] shrink-0">
                   <AchievementCard achievement={a} />
                 </div>
               ))}
             </div>
             <div className="flex items-stretch gap-4 pr-4" aria-hidden="true">
               {unlocked.map(a => (
-                <div key={`${a.id}-dup`} className="w-[320px] md:w-[360px] lg:w-[405px] xl:w-[420px] shrink-0">
+                <div key={`${a.id}-dup`} className="w-[320px] md:w-[360px] lg:w-[400px] shrink-0">
                   <AchievementCard achievement={a} />
                 </div>
               ))}

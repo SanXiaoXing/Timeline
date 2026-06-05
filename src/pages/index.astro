@@ -11,29 +11,23 @@ const achievements = allAchievementsEntries.flatMap((entry: { data: { list: unkn
 
 const items = [
   {
-    label: "Awards",
-    bgColor: "rgba(255, 255, 255, 0.7)",
-    textColor: "#27272a",
+    label: "成就",
     links: [
-      { label: "Trophy Room", ariaLabel: "Go to Achievements", href: "/achievements" }
+      { label: "成就墙", ariaLabel: "前往成就页面", href: "/achievements" }
     ]
   },
   {
-    label: "Projects",
-    bgColor: "rgba(255, 255, 255, 0.7)",
-    textColor: "#27272a",
+    label: "项目",
     links: [
-      { label: "Project Logs", ariaLabel: "Go to Projects", href: "/projects" },
-      { label: "Xing's Quotes", ariaLabel: "Go to Quotes", href: "/xing" }
+      { label: "项目日志", ariaLabel: "前往项目页面", href: "/projects" },
+      { label: "Xing's Quotes", ariaLabel: "前往星语页面", href: "/xing" }
     ]
   },
   {
-    label: "Contact",
-    bgColor: "rgba(255, 255, 255, 0.7)",
-    textColor: "#27272a",
+    label: "联系",
     links: [
-      { label: "Email", ariaLabel: "Email us", href: "mailto:sanxiaoxing@qq.com" },
-      { label: "Github", ariaLabel: "Github", href: "https://github.com/SanXiaoXing" }
+      { label: "Email", ariaLabel: "发送邮件", href: "mailto:sanxiaoxing@qq.com" },
+      { label: "GitHub", ariaLabel: "GitHub", href: "https://github.com/SanXiaoXing" }
     ]
   }
 ];
@@ -41,47 +35,44 @@ const items = [
 
 <Layout>
   <div class="relative min-h-screen overflow-hidden">
-    {/* Subtle gradient overlay */}
-    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-100/50 via-transparent to-transparent pointer-events-none z-0"></div>
-    
     <CardNav
       client:load
       logoText="SanXiaoXing"
-      logoFont="'Emblema One', cursive"
-      logoAlt="SanXiaoXing Logo"
       items={items}
-      baseColor="rgba(255, 255, 255, 0.8)"
-      menuColor="#52525b"
-      buttonBgColor="#6366f1"
-      buttonTextColor="#fff"
-      ease="power3.out"
-      className="border border-neutral-200/50 rounded-2xl bg-white/70 backdrop-blur-xl shadow-lg shadow-neutral-200/50"
     />
     
-    <div class="pt-32 px-4 md:px-6 relative z-10 max-w-6xl mx-auto">
-      <section class="py-12 md:py-20 text-center">
-        <h1 class="text-balance text-4xl font-bold tracking-tight text-neutral-800 md:text-7xl">
-          记录我的
-          <span class="ml-2 inline-flex h-[1.15em] overflow-hidden align-baseline">
-            <RotatingText
-              client:load
-              texts={['灵感', '日常', '成长', '项目', '人生片段']}
-              rotationInterval={2200}
-              staggerDuration={0.03}
-              staggerFrom="first"
-              mainClassName="inline-flex font-bold text-indigo-500"
-              splitLevelClassName="inline-flex"
-              elementLevelClassName="will-change-transform"
-              style={{ fontFamily: "'Emblema One', cursive" }}
-            />
-          </span>
-        </h1>
+    <div class="pt-32 px-6 md:px-12 relative z-10 max-w-content mx-auto">
+      {/* Asymmetric Hero — left-aligned, split layout */}
+      <section class="grid grid-cols-1 md:grid-cols-12 gap-0 py-12 md:py-24">
+        <div class="md:col-span-7 md:col-start-1">
+          <p class="font-mono text-xs tracking-[0.2em] uppercase text-muted mb-6">Portfolio / 2026</p>
+          <h1 class="font-display text-5xl md:text-6xl leading-[1.15] text-primary font-normal">
+            记录我的<br />
+            <span class="inline-flex h-[1.15em] overflow-hidden align-baseline">
+              <RotatingText
+                client:load
+                texts={['灵感', '日常', '成长', '项目', '人生片段']}
+                rotationInterval={2200}
+                staggerDuration={0.03}
+                staggerFrom="first"
+                mainClassName="inline-flex text-accent"
+                splitLevelClassName="inline-flex"
+                elementLevelClassName="will-change-transform"
+              />
+            </span>
+          </h1>
+          <p class="mt-8 text-muted text-base md:text-lg leading-relaxed max-w-[55ch]">
+            一个开发者的个人作品集，以编辑风格记录项目、人生节点与思考。
+          </p>
+        </div>
+        <div class="md:col-span-4 md:col-start-9 mt-12 md:mt-0 flex items-end">
+          <div class="w-full h-px bg-divider"></div>
+        </div>
       </section>
 
       <TimeProgress client:load />
 
       <AchievementsCarousel client:load initialAchievements={achievements} />
-    
     </div>
   </div>
 </Layout>
