@@ -8,11 +8,15 @@ type AchievementModalProps = {
   onClose: () => void;
 };
 
-const rarityTheme: Record<AchievementRarity, { border: string; bg: string; text: string }> = {
-  common:    { border: '#059669', bg: 'rgba(16,185,129,0.06)', text: '#059669' },
-  rare:      { border: '#0284c7', bg: 'rgba(14,165,233,0.06)', text: '#0284c7' },
-  epic:      { border: '#7c3aed', bg: 'rgba(139,92,246,0.06)', text: '#7c3aed' },
-  legendary: { border: '#d97706', bg: 'rgba(245,158,11,0.06)', text: '#d97706' },
+/** 国画颜料色系 — kept in sync with AchievementCard.tsx */
+const rarityTheme: Record<
+  AchievementRarity,
+  { border: string; bg: string; text: string }
+> = {
+  common:    { border: '#8B5E4B', bg: 'rgba(139,94,75,0.10)',   text: '#8B5E4B' },
+  rare:      { border: '#5B6B8A', bg: 'rgba(91,107,138,0.10)',  text: '#5B6B8A' },
+  epic:      { border: '#7A5A6B', bg: 'rgba(122,90,107,0.10)',  text: '#7A5A6B' },
+  legendary: { border: '#C43A3A', bg: 'rgba(196,58,58,0.10)',   text: '#C43A3A' },
 };
 
 const AchievementModal: React.FC<AchievementModalProps> = ({ achievement, isOpen, onClose }) => {
@@ -83,10 +87,11 @@ const AchievementModal: React.FC<AchievementModalProps> = ({ achievement, isOpen
           {/* Rarity folio marker */}
           <div className="mb-8">
             <span
-              className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] px-2 py-0.5"
+              className="t-folio"
               style={{
                 color: theme.text,
                 backgroundColor: theme.bg,
+                padding: '0.18rem 0.5rem',
                 borderBottom: `1px solid ${theme.border}`,
                 opacity: achievement.unlocked ? 1 : 0.5,
               }}
@@ -110,8 +115,7 @@ const AchievementModal: React.FC<AchievementModalProps> = ({ achievement, isOpen
 
           {/* Name — editorial headline */}
           <h2
-            className="font-display text-2xl md:text-3xl text-primary font-normal leading-tight mb-4"
-            style={{ letterSpacing: '-0.01em' }}
+            className="font-display text-2xl md:text-3xl text-primary font-normal t-track-headline t-rhythm-snug mb-4"
           >
             {achievement.name}
           </h2>
@@ -120,7 +124,7 @@ const AchievementModal: React.FC<AchievementModalProps> = ({ achievement, isOpen
           <div className="w-full h-px my-6 bg-divider" />
 
           {/* Description — editorial body */}
-          <p className="text-base text-muted leading-relaxed mb-8 max-w-[50ch]">
+          <p className="text-base text-muted t-rhythm-relaxed mb-8 max-w-[50ch]">
             {achievement.description}
           </p>
 

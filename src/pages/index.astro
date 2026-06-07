@@ -1,54 +1,26 @@
 ---
-import CardNav from '../components/CardNav';
 import RotatingText from '../components/RotatingText';
 import TimeProgress from '../components/TimeProgress';
 import AchievementsCarousel from '../components/AchievementsCarousel';
+import RevealText from '../components/RevealText';
 import Layout from '../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 
 const allAchievementsEntries = await getCollection('achievements');
 const achievements = allAchievementsEntries.flatMap((entry: { data: { list: unknown[] } }) => entry.data.list);
-
-const items = [
-  {
-    label: "成就",
-    links: [
-      { label: "成就墙", ariaLabel: "前往成就页面", href: "/achievements" }
-    ]
-  },
-  {
-    label: "项目",
-    links: [
-      { label: "项目日志", ariaLabel: "前往项目页面", href: "/projects" },
-      { label: "Xing's Quotes", ariaLabel: "前往星语页面", href: "/xing" }
-    ]
-  },
-  {
-    label: "联系",
-    links: [
-      { label: "Email", ariaLabel: "发送邮件", href: "mailto:sanxiaoxing@qq.com" },
-      { label: "GitHub", ariaLabel: "GitHub", href: "https://github.com/SanXiaoXing" }
-    ]
-  }
-];
 ---
 
 <Layout>
   <div class="relative min-h-screen overflow-hidden">
-    <CardNav
-      client:load
-      logoText="SanXiaoXing"
-      items={items}
-    />
-    
     <div class="pt-32 px-6 md:px-12 relative z-10 max-w-content mx-auto">
       {/* Asymmetric Hero — left-aligned, split layout */}
       <section class="grid grid-cols-1 md:grid-cols-12 gap-0 py-12 md:py-24">
         <div class="md:col-span-7 md:col-start-1">
-          <p class="font-mono text-xs tracking-[0.2em] uppercase text-muted mb-6">Portfolio / 2026</p>
-          <h1 class="font-display text-5xl md:text-6xl leading-[1.15] text-primary font-normal">
-            记录我的<br />
-            <span class="inline-flex h-[1.15em] overflow-hidden align-baseline">
+          <p class="t-folio mb-6">Portfolio / 2026</p>
+          <h1 class="font-display text-5xl md:text-6xl t-track-headline t-rhythm-tight text-primary font-normal">
+            记录我的
+            <br />
+            <span class="inline-flex h-[1.15em] overflow-hidden align-baseline t-mask">
               <RotatingText
                 client:load
                 texts={['灵感', '日常', '成长', '项目', '人生片段']}
@@ -61,9 +33,11 @@ const items = [
               />
             </span>
           </h1>
-          <p class="mt-8 text-muted text-base md:text-lg leading-relaxed max-w-[55ch]">
-            一个开发者的个人作品集，以编辑风格记录项目、人生节点与思考。
-          </p>
+          <RevealText
+            client:visible
+            text="一个开发者的个人作品集，以编辑风格记录项目、人生节点与思考。"
+            className="block mt-8 text-muted text-base md:text-lg t-rhythm-relaxed max-w-[55ch]"
+          />
         </div>
         <div class="md:col-span-4 md:col-start-9 mt-12 md:mt-0 flex items-end">
           <div class="w-full h-px bg-divider"></div>

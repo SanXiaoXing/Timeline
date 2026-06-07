@@ -1,6 +1,31 @@
 ---
+import '../styles/typography.css';
 import LightBackground from '../components/LightBackground';
+import CardNav from '../components/CardNav';
 import Footer from '../components/Footer';
+
+const navItems = [
+  {
+    label: "成就",
+    links: [
+      { label: "成就墙", ariaLabel: "前往成就页面", href: "/achievements" }
+    ]
+  },
+  {
+    label: "项目",
+    links: [
+      { label: "项目日志", ariaLabel: "前往项目页面", href: "/projects" },
+      { label: "Xing's Quotes", ariaLabel: "前往星语页面", href: "/xing" }
+    ]
+  },
+  {
+    label: "联系",
+    links: [
+      { label: "Email", ariaLabel: "发送邮件", href: "mailto:sanxiaoxing@qq.com" },
+      { label: "GitHub", ariaLabel: "GitHub", href: "https://github.com/SanXiaoXing" }
+    ]
+  }
+];
 ---
 
 <!doctype html>
@@ -26,6 +51,21 @@ import Footer from '../components/Footer';
 				font-weight: normal;
 				font-style: italic;
 				font-display: swap;
+			}
+			/*
+			 * Brand mark — Emblema One. Single weight (Regular) TTF.
+			 * Reserved for the SanXiaoXing wordmark only. Emblema One is a
+			 * strong decorative display face; do NOT use it for long passages.
+			 * Fallback chain: Emblema One → Instrument Serif (similar serif
+			 * silhouette) → Noto Serif SC (CJK serif) → generic serif.
+			 */
+			@font-face {
+				font-family: 'Emblema One';
+				src: url('/fonts/EmblemaOne-Regular.ttf') format('truetype');
+				font-weight: normal;
+				font-style: normal;
+				font-display: swap;
+				unicode-range: U+0041-005A, U+0061-007A, U+0030-0039; /* ASCII letters/digits only */
 			}
 			@font-face {
 				font-family: 'DM Sans';
@@ -66,6 +106,23 @@ import Footer from '../components/Footer';
 				line-height: 1.8;
 				-webkit-font-smoothing: antialiased;
 				-moz-osx-font-smoothing: grayscale;
+				text-rendering: optimizeLegibility;
+				font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1, 'onum' 1;
+				font-kerning: normal;
+				font-variant-ligatures: common-ligatures contextual;
+			}
+
+			/* --- Display type: optical sizing + Instrument Serif's stylistic set --- */
+			.font-display {
+				font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1, 'onum' 1, 'ss01' 1;
+				font-optical-sizing: auto;
+				font-variant-numeric: oldstyle-nums proportional-nums;
+			}
+
+			/* --- Mono copy: tabular figures for stable number columns --- */
+			.font-mono {
+				font-feature-settings: 'kern' 0, 'liga' 0, 'calt' 0, 'tnum' 1, 'zero' 1;
+				font-variant-numeric: tabular-nums slashed-zero;
 			}
 
 			/* --- Scrollbar (paper theme) --- */
@@ -92,6 +149,11 @@ import Footer from '../components/Footer';
 	</head>
 	<body class="font-body">
 		<LightBackground client:load />
+		<CardNav
+			client:load
+			logoText="SanXiaoXing"
+			items={navItems}
+		/>
 		<main class="relative z-10">
 			<slot />
 		</main>

@@ -1,5 +1,7 @@
 import React, { useRef, useState } from 'react';
 import BackButton from './BackButton';
+import KineticHeadline from './KineticHeadline';
+import RevealText from './RevealText';
 
 export type QuoteItem = {
   date: string;
@@ -34,13 +36,22 @@ const XingQuotes: React.FC<XingQuotesProps> = ({ quotes }) => {
 
         <div className="grid grid-cols-1 md:grid-cols-12 gap-0">
           <div className="md:col-span-7">
-            <p className="font-mono text-xs tracking-[0.2em] uppercase text-muted mb-4">Quotes</p>
-            <h1 className="font-display text-4xl md:text-5xl text-primary font-normal leading-[1.15]">
-              Xing's Quotes
-            </h1>
-            <p className="mt-4 text-muted text-base leading-relaxed max-w-[50ch]">
-              记录每一天的思考、学习与成长，用文字留下时间的痕迹。
-            </p>
+            <p className="t-folio mb-4">Quotes</p>
+            <KineticHeadline
+              as="h1"
+              text="Xing's Quotes"
+              className="font-display text-4xl md:text-5xl t-track-headline t-rhythm-tight text-primary font-normal"
+              stagger={0.05}
+              delay={0.1}
+            />
+            <RevealText
+              text="记录每一天的思考、学习与成长，用文字留下时间的痕迹。"
+              as="p"
+              className="mt-4 block text-muted text-base t-rhythm-relaxed max-w-[50ch]"
+              splitBy="sentence"
+              stagger={0.08}
+              delay={0.4}
+            />
           </div>
         </div>
       </div>

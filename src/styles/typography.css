@@ -1,0 +1,194 @@
+/*
+ * Magazine typography tokens — built on top of DESIGN.md
+ * Every class here is additive: it never overrides the user's existing layout.
+ * Goal: tighter kerning, proper hanging punctuation, optical sizing for
+ * Instrument Serif, and a few magazine-only utilities (drop cap, pull quote,
+ * column rules) that future sections can opt into.
+ */
+
+/* --- OpenType features, applied globally to body copy --- */
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1, 'onum' 1;
+  font-kerning: normal;
+  font-variant-ligatures: common-ligatures contextual;
+}
+
+/* Display copy in Instrument Serif benefits from old-style figures too,
+   but NEVER enable discretionary ligatures — looks like a script. */
+.font-display {
+  font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1, 'onum' 1, 'ss01' 1;
+  font-optical-sizing: auto;
+  font-variant-numeric: oldstyle-nums proportional-nums;
+}
+
+/* --- Mono copy keeps tabular figures for stable number columns --- */
+.font-mono {
+  font-feature-settings: 'kern' 0, 'liga' 0, 'calt' 0, 'tnum' 1, 'zero' 1;
+  font-variant-numeric: tabular-nums slashed-zero;
+}
+
+/* --- Brand wordmark — Emblema One. ---
+   Emblema One is a heavy decorative display face. It has wide
+   counter-forms, short ascenders, and rough serif terminals.
+   It needs slightly more leading than Instrument Serif, and very
+   subtle positive tracking so the glyphs don't collide. Reserve
+   this for the SanXiaoXing wordmark only — never for body copy. */
+.font-brand,
+.t-brand {
+  font-family: 'Emblema One', 'Instrument Serif', 'Noto Serif SC', serif;
+  line-height: 1.15;
+  letter-spacing: 0.02em;
+  font-weight: normal;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Compact variant for nav-sized wordmark (slightly tighter leading). */
+.t-brand-sm {
+  font-family: 'Emblema One', 'Instrument Serif', 'Noto Serif SC', serif;
+  line-height: 1.1;
+  letter-spacing: 0.015em;
+  font-weight: normal;
+}
+
+/* --- Vertical rhythm --- */
+/* Base unit = 8px. line-height values are unitless so they scale with font-size. */
+.t-rhythm-tight   { line-height: 1.15; }   /* display headlines */
+.t-rhythm-snug    { line-height: 1.3;  }   /* subheads, large numbers */
+.t-rhythm-normal  { line-height: 1.55; }   /* UI labels, list items */
+.t-rhythm-relaxed { line-height: 1.8;  }   /* body copy (current default) */
+.t-rhythm-loose   { line-height: 2.0;  }   /* long-form editorial passages */
+
+/* --- Tracking (letter-spacing) --- */
+.t-track-display  { letter-spacing: -0.02em; }  /* large display, tightens optical gaps */
+.t-track-headline { letter-spacing: -0.01em; }  /* h1, h2 */
+.t-track-body     { letter-spacing:  0;      }  /* neutral */
+.t-track-caption  { letter-spacing:  0.02em; }  /* small UI labels */
+.t-track-eyebrow  { letter-spacing:  0.18em; }  /* uppercase micro labels */
+
+/* --- Hanging punctuation: 引号、句号悬挂到 margin 外 --- */
+.t-hang {
+  hanging-punctuation: first last;
+  text-indent: 0;
+}
+
+/* --- Justify with hyphenation, for long passages --- */
+.t-justify {
+  text-align: justify;
+  text-justify: inter-word;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+}
+
+/* --- Drop cap — first letter of a passage becomes a 3-line display cap --- */
+.t-dropcap::first-letter {
+  font-family: 'Instrument Serif', 'Noto Serif SC', serif;
+  font-weight: normal;
+  float: left;
+  font-size: 4.5em;
+  line-height: 0.9;
+  padding: 0.08em 0.12em 0 0;
+  margin: 0.05em 0.08em 0 0;
+  color: #2C3639;
+  font-feature-settings: 'kern' 1, 'liga' 1, 'ss01' 1;
+}
+
+/* --- Pull quote — magazine-style block quote with side rule --- */
+.t-pullquote {
+  font-family: 'Instrument Serif', 'Noto Serif SC', serif;
+  font-size: 1.5rem;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+  color: #2C3639;
+  padding-left: 1.25rem;
+  border-left: 2px solid #D45D4A;
+  font-style: italic;
+}
+
+/* --- Folio / kicker — small mono label above a section title --- */
+.t-folio {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #7A7A72;
+  font-weight: 500;
+}
+
+/* --- Italic display with descender clearance ---
+   Instrument Serif Italic has long descenders on y/g/j/p/q. The default
+   `leading-[1]` clips them — every kinetic display headline uses this. */
+.t-italic-safe {
+  font-style: italic;
+  line-height: 1.1;
+  padding-bottom: 0.05em;
+}
+
+/* --- Optical-size utility: when a display is 4xl+ we tighten tracking --- */
+@media (min-width: 768px) {
+  .md\:t-track-display { letter-spacing: -0.025em; }
+}
+
+/* --- Selection reset for Instrument Serif Italic on accent background --- */
+.font-display::selection {
+  background: rgba(212, 93, 74, 0.25);
+  color: #2C3639;
+}
+
+/* --- Stable height for kinetic text containers ---
+   A character-revealing mask needs overflow hidden but cannot clip descenders. */
+.t-mask {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+  /* leave room for descender so italic y/p/g never get sliced */
+  padding-bottom: 0.06em;
+  margin-bottom: -0.06em;
+}
+
+/* --- Reading column — 65ch max, comfortable for long passages --- */
+.t-column {
+  max-width: 65ch;
+  line-height: 1.8;
+  color: #2C3639;
+}
+
+/* --- Rule utilities — magazine hairline treatments --- */
+.t-rule-top    { border-top: 1px solid #E5DFD6; }
+.t-rule-bottom { border-bottom: 1px solid #E5DFD6; }
+.t-rule-accent { border-top: 1px solid #D45D4A; }
+
+/* --- Reveal animation primitives (consumed by KineticHeadline / RevealText) --- */
+@keyframes t-rise-in {
+  from { transform: translateY(110%); opacity: 0; }
+  to   { transform: translateY(0);   opacity: 1; }
+}
+@keyframes t-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes t-line-grow {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+.t-rise > span,
+.t-rise > .t-rise-word,
+.t-rise > .t-rise-char {
+  display: inline-block;
+  will-change: transform, opacity;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .t-rise > *,
+  .t-rise-word,
+  .t-rise-char {
+    animation: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+}

@@ -114,7 +114,7 @@ const SocialLink: React.FC<{
       transition: { type: 'spring', stiffness: 300, damping: 15 },
     }}
     whileTap={{ scale: 0.9 }}
-    className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-card hover:bg-link flex items-center justify-center transition-colors duration-300 group"
+    className="w-8 h-8 md:w-10 md:h-10 bg-card hover:bg-link flex items-center justify-center transition-colors duration-300 group"
     aria-label={label}
   >
     <motion.span
@@ -211,7 +211,10 @@ const Footer: React.FC = () => {
                 <div className="grid grid-cols-2 md:grid-cols-12 gap-8 md:gap-12">
                   {/* Brand */}
                   <div className="col-span-2 md:col-span-5">
-                    <div className="font-display text-3xl md:text-4xl text-primary mb-3">
+                    <div
+                      className="font-brand text-3xl md:text-4xl text-primary mb-3"
+                      style={{ letterSpacing: '0.02em', lineHeight: 1.15 }}
+                    >
                       SanXiaoXing
                     </div>
                     <p className="text-muted max-w-sm leading-relaxed text-sm">

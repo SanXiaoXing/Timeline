@@ -37,7 +37,7 @@ list:
     rarity: 'epic'
     progressPct: 100
     unlocked: true
-	unlockedAt: '2026-06-02 09:22'
+    unlockedAt: '2026-06-02 09:22'
 
   - id: 'skill-01'
     icon: '⚙️'

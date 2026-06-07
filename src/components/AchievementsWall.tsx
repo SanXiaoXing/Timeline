@@ -2,6 +2,8 @@ import React, { useMemo, useState } from 'react';
 import AchievementCard from './AchievementCard';
 import AchievementModal from './AchievementModal';
 import BackButton from './BackButton';
+import KineticHeadline from './KineticHeadline';
+import RevealText from './RevealText';
 import type { Achievement, AchievementCategory } from '../contents/achievements';
 import { achievementCategoryLabels } from '../contents/achievements';
 
@@ -49,13 +51,22 @@ const AchievementsWall: React.FC<{ initialAchievements: Achievement[] }> = ({ in
       <header className="mb-16">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-10">
           <div className="md:col-span-7">
-            <p className="font-mono text-xs tracking-[0.2em] uppercase text-muted mb-4">Achievements</p>
-            <h1 className="font-display text-4xl md:text-5xl text-primary font-normal leading-[1.15]">
-              成就记录
-            </h1>
-            <p className="mt-4 text-muted text-base leading-relaxed max-w-[50ch]">
-              记录生活、工作与学习中的每一个重要里程碑。未解锁的成就将保持隐匿状态，等待在未来的某一刻被点亮。
-            </p>
+            <p className="t-folio mb-4">Achievements</p>
+            <KineticHeadline
+              as="h1"
+              text="成就记录"
+              className="font-display text-4xl md:text-5xl t-track-headline t-rhythm-tight text-primary font-normal"
+              stagger={0.06}
+              delay={0.1}
+            />
+            <RevealText
+              text="记录生活、工作与学习中的每一个重要里程碑。未解锁的成就将保持隐匿状态，等待在未来的某一刻被点亮。"
+              as="p"
+              className="mt-4 block text-muted text-base t-rhythm-relaxed max-w-[50ch]"
+              splitBy="sentence"
+              stagger={0.08}
+              delay={0.45}
+            />
           </div>
 
           <div className="md:col-span-4 md:col-start-9 flex items-end gap-8 md:gap-12">

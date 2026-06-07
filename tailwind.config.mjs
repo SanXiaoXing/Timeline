@@ -24,6 +24,9 @@ export default {
         display:  ['Instrument Serif', 'Noto Serif SC', 'serif'],
         body:     ['DM Sans', 'Noto Sans SC', 'sans-serif'],
         mono:     ['JetBrains Mono', 'monospace'],
+        // Brand wordmark only. Heavy decorative display face — fall back to
+        // Instrument Serif then generic serif if the TTF fails to load.
+        brand:    ['"Emblema One"', '"Instrument Serif"', '"Noto Serif SC"', 'serif'],
       },
       fontSize: {
         'xs':  '0.75rem',

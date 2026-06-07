@@ -65,7 +65,8 @@ const CardNav: React.FC<CardNavProps> = ({
             />
           </button>
           <span
-            className="font-display text-2xl tracking-tight text-primary"
+            className="font-brand text-2xl text-primary"
+            style={{ letterSpacing: '0.015em', lineHeight: 1.1 }}
           >
             {logoText}
           </span>

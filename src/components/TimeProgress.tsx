@@ -177,8 +177,6 @@ const TimeProgress: React.FC<{ className?: string }> = ({ className }) => {
 
   return (
     <section ref={rootRef} className={cn('mx-auto max-w-content px-4 py-16 md:py-24', className)}>
-      <div className="mx-auto max-w-4xl text-center" />
-
       {/* Tab indicators */}
       <div className="mt-12 flex items-center justify-center">
         <div

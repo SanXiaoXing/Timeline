@@ -29,47 +29,36 @@
     },
     ".astro/data-store.json": {
       "ipo_ts": 1780688154516,
-      "edit_count": 3,
+      "edit_count": 4,
       "last_lines": 1,
-      "last_ts": 1780689558073,
+      "last_ts": 1780838163958,
       "delisted": false,
       "last_source": "onEdit",
-      "last_content_hash": "e70ac80d"
+      "last_content_hash": "5744b63b"
     },
     "node_modules/.astro/data-store.json": {
       "ipo_ts": 1780688447653,
-      "edit_count": 1,
+      "edit_count": 2,
       "last_lines": 1,
-      "last_ts": 1780688447653,
+      "last_ts": 1780839027403,
       "delisted": false,
       "last_source": "onEdit",
-      "last_content_hash": "eeea947a"
+      "last_content_hash": "f75d6a8b"
     },
     "dist/.DS_Store": {
       "ipo_ts": 1780688448086,
-      "edit_count": 37,
+      "edit_count": 43,
       "last_lines": 4,
-      "last_ts": 1780691404646,
+      "last_ts": 1780840198216,
       "delisted": false,
       "last_source": "onEdit",
       "last_content_hash": "1d2427de"
     },
-    "dist/_astro/achievements.CbEu_cQ_.css": {
-      "ipo_ts": 1780688448090,
-      "edit_count": 1,
-      "last_lines": 1,
-      "last_ts": 1780688448090,
-      "delisted": true,
-      "last_source": "onEdit",
-      "last_content_hash": "3c33f97e",
-      "delisted_at": 1780826298837,
-      "delist_rounds": 0
-    },
     "dist/favicon.svg": {
       "ipo_ts": 1780688448091,
-      "edit_count": 37,
+      "edit_count": 43,
       "last_lines": 5185,
-      "last_ts": 1780691404649,
+      "last_ts": 1780840198220,
       "delisted": false,
       "last_source": "onEdit",
       "last_content_hash": "23ce6363"
@@ -94,120 +83,12 @@
     },
     "dist/404.html": {
       "ipo_ts": 1780688448604,
-      "edit_count": 37,
-      "last_lines": 7,
-      "last_ts": 1780691405246,
+      "edit_count": 43,
+      "last_lines": 17,
+      "last_ts": 1780840198814,
       "delisted": false,
       "last_source": "onEdit",
-      "last_content_hash": "f4346ade"
-    },
-    "dist/_astro/AchievementCard.k6zmzpYz.js": {
-      "ipo_ts": 1780688448609,
-      "edit_count": 1,
-      "last_lines": 1,
-      "last_ts": 1780688448609,
-      "delisted": true,
-      "last_source": "onEdit",
-      "last_content_hash": "5e91a73e",
-      "delisted_at": 1780826298837,
-      "delist_rounds": 0
-    },
-    "dist/_astro/AchievementsCarousel.BkNkLeP1.js": {
-      "ipo_ts": 1780688448609,
-      "edit_count": 1,
-      "last_lines": 1,
-      "last_ts": 1780688448609,
-      "delisted": true,
-      "last_source": "onEdit",
-      "last_content_hash": "35b14a49",
-      "delisted_at": 1780826298837,
-      "delist_rounds": 0
-    },
-    "dist/_astro/AchievementsWall.Cdh9UU7E.js": {
-      "ipo_ts": 1780688448609,
-      "edit_count": 1,
-      "last_lines": 1,
-      "last_ts": 1780688448609,
-      "delisted": true,
-      "last_source": "onEdit",
-      "last_content_hash": "842205f4",
-      "delisted_at": 1780826298837,
-      "delist_rounds": 0
-    },
-    "dist/_astro/CardNav.DgVgz0jU.js": {
-      "ipo_ts": 1780688448610,
-      "edit_count": 1,
-      "last_lines": 1,
-      "last_ts": 1780688448610,
-      "delisted": true,
-      "last_source": "onEdit",
-      "last_content_hash": "300f1322",
-      "delisted_at": 1780826298837,
-      "delist_rounds": 0
-    },
-    "dist/_astro/Footer.CuVf7SH9.js": {
-      "ipo_ts": 1780688448610,
-      "edit_count": 1,
-      "last_lines": 1,
-      "last_ts": 1780688448610,
-      "delisted": true,
-      "last_source": "onEdit",
-      "last_content_hash": "dc65331b",
-      "delisted_at": 1780826298837,
-      "delist_rounds": 0
-    },
-    "dist/_astro/LightBackground.DmyjEIRf.js": {
-      "ipo_ts": 1780688448610,
-      "edit_count": 1,
-      "last_lines": 1,
-      "last_ts": 1780688448610,
-      "delisted": false,
-      "last_source": "onEdit",
-      "last_content_hash": "7fd869aa"
-    },
-    "dist/_astro/ProjectProgressHUD.BSenkofQ.js": {
-      "ipo_ts": 1780688448611,
-      "edit_count": 1,
-      "last_lines": 1,
-      "last_ts": 1780688448611,
-      "delisted": true,
-      "last_source": "onEdit",
-      "last_content_hash": "435e4424",
-      "delisted_at": 1780826298837,
-      "delist_rounds": 0
-    },
-    "dist/_astro/RotatingText.D92hhfbI.js": {
-      "ipo_ts": 1780688448611,
-      "edit_count": 1,
-      "last_lines": 2,
-      "last_ts": 1780688448611,
-      "delisted": true,
-      "last_source": "onEdit",
-      "last_content_hash": "882acef9",
-      "delisted_at": 1780826298837,
-      "delist_rounds": 0
-    },
-    "dist/_astro/TimeProgress.DrqJiyNv.js": {
-      "ipo_ts": 1780688448611,
-      "edit_count": 1,
-      "last_lines": 1,
-      "last_ts": 1780688448611,
-      "delisted": true,
-      "last_source": "onEdit",
-      "last_content_hash": "3ad96834",
-      "delisted_at": 1780826298837,
-      "delist_rounds": 0
-    },
-    "dist/_astro/XingQuotes.DIZ7UW8r.js": {
-      "ipo_ts": 1780688448612,
-      "edit_count": 1,
-      "last_lines": 1,
-      "last_ts": 1780688448612,
-      "delisted": true,
-      "last_source": "onEdit",
-      "last_content_hash": "f1ddc56f",
-      "delisted_at": 1780826298837,
-      "delist_rounds": 0
+      "last_content_hash": "46d526dc"
     },
     "dist/_astro/achievements.CKYk-Ndp.js": {
       "ipo_ts": 1780688448612,
@@ -245,70 +126,59 @@
       "last_source": "onEdit",
       "last_content_hash": "dee5fad2"
     },
-    "dist/_astro/proxy.Cwfx4K1n.js": {
-      "ipo_ts": 1780688448614,
-      "edit_count": 1,
-      "last_lines": 9,
-      "last_ts": 1780688448614,
-      "delisted": true,
-      "last_source": "onEdit",
-      "last_content_hash": "54badaaa",
-      "delisted_at": 1780826298837,
-      "delist_rounds": 0
-    },
     "dist/achievements/index.html": {
       "ipo_ts": 1780688448615,
-      "edit_count": 12,
-      "last_lines": 154,
-      "last_ts": 1780691405250,
+      "edit_count": 17,
+      "last_lines": 203,
+      "last_ts": 1780840198821,
       "delisted": false,
       "last_source": "onEdit",
-      "last_content_hash": "e5d2166f"
+      "last_content_hash": "27f6aeac"
     },
     "dist/index.html": {
       "ipo_ts": 1780688448615,
-      "edit_count": 37,
-      "last_lines": 106,
-      "last_ts": 1780691405251,
+      "edit_count": 43,
+      "last_lines": 224,
+      "last_ts": 1780840198817,
       "delisted": false,
       "last_source": "onEdit",
-      "last_content_hash": "2fa04303"
+      "last_content_hash": "1f548d9a"
     },
     "dist/projects/index.html": {
       "ipo_ts": 1780688448616,
-      "edit_count": 12,
-      "last_lines": 11,
-      "last_ts": 1780691405252,
+      "edit_count": 16,
+      "last_lines": 21,
+      "last_ts": 1780840198818,
       "delisted": false,
       "last_source": "onEdit",
-      "last_content_hash": "1a440b39"
+      "last_content_hash": "b772cba0"
     },
     "dist/projects/pixel-quest/index.html": {
       "ipo_ts": 1780688448616,
-      "edit_count": 13,
-      "last_lines": 19,
-      "last_ts": 1780691405253,
+      "edit_count": 17,
+      "last_lines": 29,
+      "last_ts": 1780840198819,
       "delisted": false,
       "last_source": "onEdit",
-      "last_content_hash": "51db37bf"
+      "last_content_hash": "65a50301"
     },
     "dist/projects/timeline/index.html": {
       "ipo_ts": 1780688448617,
-      "edit_count": 13,
-      "last_lines": 4,
-      "last_ts": 1780691405254,
+      "edit_count": 17,
+      "last_lines": 14,
+      "last_ts": 1780840198820,
       "delisted": false,
       "last_source": "onEdit",
-      "last_content_hash": "acdcbc79"
+      "last_content_hash": "a204821e"
     },
     "dist/xing/index.html": {
       "ipo_ts": 1780688448617,
-      "edit_count": 12,
-      "last_lines": 1,
-      "last_ts": 1780691405254,
+      "edit_count": 17,
+      "last_lines": 33,
+      "last_ts": 1780840198820,
       "delisted": false,
       "last_source": "onEdit",
-      "last_content_hash": "a26ce315"
+      "last_content_hash": "4d304706"
     },
     "src/components/TimeProgress.tsx": {
       "ipo_ts": 1780688697271,
@@ -318,50 +188,6 @@
       "delisted": false,
       "last_source": "onEdit",
       "last_content_hash": "a777a147"
-    },
-    "dist/_astro/achievements.58JHmtMN.css": {
-      "ipo_ts": 1780688746549,
-      "edit_count": 1,
-      "last_lines": 1,
-      "last_ts": 1780688746549,
-      "delisted": true,
-      "last_source": "onEdit",
-      "last_content_hash": "3bc2b389",
-      "delisted_at": 1780826298837,
-      "delist_rounds": 0
-    },
-    "dist/_astro/TimeProgress.DD5R_lDB.js": {
-      "ipo_ts": 1780688747088,
-      "edit_count": 1,
-      "last_lines": 1,
-      "last_ts": 1780688747088,
-      "delisted": true,
-      "last_source": "onEdit",
-      "last_content_hash": "8c66ac10",
-      "delisted_at": 1780826298837,
-      "delist_rounds": 0
-    },
-    "dist/_astro/achievements.-z3b-R_n.css": {
-      "ipo_ts": 1780688883229,
-      "edit_count": 1,
-      "last_lines": 1,
-      "last_ts": 1780688883229,
-      "delisted": true,
-      "last_source": "onEdit",
-      "last_content_hash": "7a307c06",
-      "delisted_at": 1780826298837,
-      "delist_rounds": 0
-    },
-    "dist/_astro/TimeProgress.BTWkw5CO.js": {
-      "ipo_ts": 1780688883745,
-      "edit_count": 1,
-      "last_lines": 1,
-      "last_ts": 1780688883745,
-      "delisted": true,
-      "last_source": "onEdit",
-      "last_content_hash": "69c3084b",
-      "delisted_at": 1780826298837,
-      "delist_rounds": 0
     },
     "src/components/ProjectProgressTimeline.tsx": {
       "ipo_ts": 1780689107220,
@@ -390,61 +216,6 @@
       "last_source": "onEdit",
       "last_content_hash": "150c461e"
     },
-    "dist/_astro/achievements.DL2C85y-.css": {
-      "ipo_ts": 1780689195773,
-      "edit_count": 1,
-      "last_lines": 1,
-      "last_ts": 1780689195773,
-      "delisted": true,
-      "last_source": "onEdit",
-      "last_content_hash": "77680896",
-      "delisted_at": 1780826298837,
-      "delist_rounds": 0
-    },
-    "dist/_astro/ProjectProgressHUD.CGcwqkoP.js": {
-      "ipo_ts": 1780689196288,
-      "edit_count": 1,
-      "last_lines": 1,
-      "last_ts": 1780689196288,
-      "delisted": true,
-      "last_source": "onEdit",
-      "last_content_hash": "77aa8211",
-      "delisted_at": 1780826298837,
-      "delist_rounds": 0
-    },
-    "dist/_astro/achievements.1tamtohK.css": {
-      "ipo_ts": 1780689470595,
-      "edit_count": 1,
-      "last_lines": 1,
-      "last_ts": 1780689470595,
-      "delisted": true,
-      "last_source": "onEdit",
-      "last_content_hash": "e0db9e9b",
-      "delisted_at": 1780826298837,
-      "delist_rounds": 0
-    },
-    "dist/_astro/ProjectProgressHUD.C74L9xN6.js": {
-      "ipo_ts": 1780689471132,
-      "edit_count": 1,
-      "last_lines": 1,
-      "last_ts": 1780689471132,
-      "delisted": true,
-      "last_source": "onEdit",
-      "last_content_hash": "738bd43b",
-      "delisted_at": 1780826298837,
-      "delist_rounds": 0
-    },
-    "dist/_astro/ProjectProgressHUD.DkC3ISIj.js": {
-      "ipo_ts": 1780689504539,
-      "edit_count": 1,
-      "last_lines": 1,
-      "last_ts": 1780689504539,
-      "delisted": true,
-      "last_source": "onEdit",
-      "last_content_hash": "1d0f178",
-      "delisted_at": 1780826298837,
-      "delist_rounds": 0
-    },
     "src/components/AchievementCard.tsx": {
       "ipo_ts": 1780689777471,
       "edit_count": 8,
@@ -456,96 +227,30 @@
     },
     "src/components/XingQuotes.tsx": {
       "ipo_ts": 1780689826163,
-      "edit_count": 5,
-      "last_lines": 196,
-      "last_ts": 1780691542356,
+      "edit_count": 8,
+      "last_lines": 207,
+      "last_ts": 1780838815173,
       "delisted": false,
       "last_source": "onEdit",
-      "last_content_hash": "40d7cfd8"
+      "last_content_hash": "71c09ad1"
     },
     "src/components/AchievementsWall.tsx": {
       "ipo_ts": 1780689880304,
-      "edit_count": 7,
-      "last_lines": 162,
-      "last_ts": 1780691517931,
+      "edit_count": 9,
+      "last_lines": 173,
+      "last_ts": 1780838784829,
       "delisted": false,
       "last_source": "onEdit",
-      "last_content_hash": "a6c73cd3"
+      "last_content_hash": "536351e6"
     },
     "src/components/AchievementModal.tsx": {
       "ipo_ts": 1780689923455,
-      "edit_count": 1,
-      "last_lines": 168,
-      "last_ts": 1780689923455,
+      "edit_count": 2,
+      "last_lines": 172,
+      "last_ts": 1780838870688,
       "delisted": false,
       "last_source": "onEdit",
-      "last_content_hash": "278c0446"
-    },
-    "dist/_astro/achievements.DL57e1PG.css": {
-      "ipo_ts": 1780689926888,
-      "edit_count": 1,
-      "last_lines": 1,
-      "last_ts": 1780689926888,
-      "delisted": true,
-      "last_source": "onEdit",
-      "last_content_hash": "fdb303d2",
-      "delisted_at": 1780826298837,
-      "delist_rounds": 0
-    },
-    "dist/_astro/AchievementCard.BBL1_w1U.js": {
-      "ipo_ts": 1780689927410,
-      "edit_count": 1,
-      "last_lines": 5,
-      "last_ts": 1780689927410,
-      "delisted": true,
-      "last_source": "onEdit",
-      "last_content_hash": "3d776e06",
-      "delisted_at": 1780826298837,
-      "delist_rounds": 0
-    },
-    "dist/_astro/AchievementsCarousel.6bk0auyx.js": {
-      "ipo_ts": 1780689927410,
-      "edit_count": 1,
-      "last_lines": 1,
-      "last_ts": 1780689927410,
-      "delisted": true,
-      "last_source": "onEdit",
-      "last_content_hash": "3f65bffd",
-      "delisted_at": 1780826298837,
-      "delist_rounds": 0
-    },
-    "dist/_astro/AchievementsWall.BLpoJYLF.js": {
-      "ipo_ts": 1780689927411,
-      "edit_count": 1,
-      "last_lines": 11,
-      "last_ts": 1780689927411,
-      "delisted": true,
-      "last_source": "onEdit",
-      "last_content_hash": "3170e529",
-      "delisted_at": 1780826298837,
-      "delist_rounds": 0
-    },
-    "dist/_astro/ProjectProgressHUD.sicCRETv.js": {
-      "ipo_ts": 1780689927411,
-      "edit_count": 1,
-      "last_lines": 1,
-      "last_ts": 1780689927411,
-      "delisted": true,
-      "last_source": "onEdit",
-      "last_content_hash": "f7a5987d",
-      "delisted_at": 1780826298837,
-      "delist_rounds": 0
-    },
-    "dist/_astro/XingQuotes.Dt_69SIv.js": {
-      "ipo_ts": 1780689927412,
-      "edit_count": 1,
-      "last_lines": 1,
-      "last_ts": 1780689927412,
-      "delisted": true,
-      "last_source": "onEdit",
-      "last_content_hash": "9844ee65",
-      "delisted_at": 1780826298837,
-      "delist_rounds": 0
+      "last_content_hash": "3aa2f21a"
     },
     "src/pages/projects.astro": {
       "ipo_ts": 1780689975820,
@@ -555,17 +260,6 @@
       "delisted": false,
       "last_source": "onEdit",
       "last_content_hash": "7f15ed77"
-    },
-    "dist/_astro/achievements.ntMBt8hc.css": {
-      "ipo_ts": 1780690123680,
-      "edit_count": 1,
-      "last_lines": 1,
-      "last_ts": 1780690123680,
-      "delisted": true,
-      "last_source": "onEdit",
-      "last_content_hash": "d8666e79",
-      "delisted_at": 1780826298837,
-      "delist_rounds": 0
     },
     "docs/designed/footer.md": {
       "ipo_ts": 1780690162775,
@@ -578,114 +272,12 @@
     },
     "src/components/Footer.tsx": {
       "ipo_ts": 1780690409955,
-      "edit_count": 12,
-      "last_lines": 308,
-      "last_ts": 1780691506143,
+      "edit_count": 26,
+      "last_lines": 311,
+      "last_ts": 1780840886037,
       "delisted": false,
       "last_source": "onEdit",
-      "last_content_hash": "39d386dd"
-    },
-    "dist/_astro/achievements.x2cyppmT.css": {
-      "ipo_ts": 1780690510787,
-      "edit_count": 1,
-      "last_lines": 1,
-      "last_ts": 1780690510787,
-      "delisted": true,
-      "last_source": "onEdit",
-      "last_content_hash": "c81a37c7",
-      "delisted_at": 1780826298837,
-      "delist_rounds": 0
-    },
-    "dist/_astro/AchievementCard.DYBMHTDs.js": {
-      "ipo_ts": 1780690511265,
-      "edit_count": 1,
-      "last_lines": 20,
-      "last_ts": 1780690511265,
-      "delisted": true,
-      "last_source": "onEdit",
-      "last_content_hash": "f3a29ab2",
-      "delisted_at": 1780826298837,
-      "delist_rounds": 0
-    },
-    "dist/_astro/AchievementsCarousel.BGm9IMNN.js": {
-      "ipo_ts": 1780690511268,
-      "edit_count": 1,
-      "last_lines": 1,
-      "last_ts": 1780690511268,
-      "delisted": true,
-      "last_source": "onEdit",
-      "last_content_hash": "9916b243",
-      "delisted_at": 1780826298837,
-      "delist_rounds": 0
-    },
-    "dist/_astro/AchievementsWall.dso7Ud9K.js": {
-      "ipo_ts": 1780690511269,
-      "edit_count": 1,
-      "last_lines": 11,
-      "last_ts": 1780690511269,
-      "delisted": true,
-      "last_source": "onEdit",
-      "last_content_hash": "294c74ef",
-      "delisted_at": 1780826298837,
-      "delist_rounds": 0
-    },
-    "dist/_astro/Footer.ChX_ohsb.js": {
-      "ipo_ts": 1780690511269,
-      "edit_count": 1,
-      "last_lines": 1,
-      "last_ts": 1780690511269,
-      "delisted": true,
-      "last_source": "onEdit",
-      "last_content_hash": "d4aecd1d",
-      "delisted_at": 1780826298837,
-      "delist_rounds": 0
-    },
-    "dist/_astro/RotatingText.BQ7RYlJB.js": {
-      "ipo_ts": 1780690511270,
-      "edit_count": 1,
-      "last_lines": 2,
-      "last_ts": 1780690511270,
-      "delisted": false,
-      "last_source": "onEdit",
-      "last_content_hash": "8ce46597"
-    },
-    "dist/_astro/TimeProgress.CCWAc5KZ.js": {
-      "ipo_ts": 1780690511270,
-      "edit_count": 1,
-      "last_lines": 1,
-      "last_ts": 1780690511270,
-      "delisted": false,
-      "last_source": "onEdit",
-      "last_content_hash": "b41df6c1"
-    },
-    "dist/_astro/index.C78fktRD.js": {
-      "ipo_ts": 1780690511271,
-      "edit_count": 1,
-      "last_lines": 9,
-      "last_ts": 1780690511271,
-      "delisted": false,
-      "last_source": "onEdit",
-      "last_content_hash": "6b4a2009"
-    },
-    "dist/_astro/proxy.BHIe7ZjH.js": {
-      "ipo_ts": 1780690511273,
-      "edit_count": 1,
-      "last_lines": 1,
-      "last_ts": 1780690511273,
-      "delisted": false,
-      "last_source": "onEdit",
-      "last_content_hash": "c43667e3"
-    },
-    "dist/_astro/achievements.CTxlOpCy.css": {
-      "ipo_ts": 1780690733099,
-      "edit_count": 1,
-      "last_lines": 1,
-      "last_ts": 1780690733099,
-      "delisted": true,
-      "last_source": "onEdit",
-      "last_content_hash": "df511bb3",
-      "delisted_at": 1780826298837,
-      "delist_rounds": 0
+      "last_content_hash": "11cfac5a"
     },
     "dist/_astro/AchievementCard.D-iCpvzs.js": {
       "ipo_ts": 1780690733551,
@@ -695,28 +287,6 @@
       "delisted": false,
       "last_source": "onEdit",
       "last_content_hash": "13d8481d"
-    },
-    "dist/_astro/AchievementsCarousel.Ch7KOXLv.js": {
-      "ipo_ts": 1780690733555,
-      "edit_count": 1,
-      "last_lines": 1,
-      "last_ts": 1780690733555,
-      "delisted": true,
-      "last_source": "onEdit",
-      "last_content_hash": "31a5011c",
-      "delisted_at": 1780826298837,
-      "delist_rounds": 0
-    },
-    "dist/_astro/AchievementsWall.o7Lchsem.js": {
-      "ipo_ts": 1780690733555,
-      "edit_count": 1,
-      "last_lines": 1,
-      "last_ts": 1780690733555,
-      "delisted": true,
-      "last_source": "onEdit",
-      "last_content_hash": "4641c634",
-      "delisted_at": 1780826298837,
-      "delist_rounds": 0
     },
     "src/components/BackButton.tsx": {
       "ipo_ts": 1780690894158,
@@ -736,39 +306,6 @@
       "last_source": "onEdit",
       "last_content_hash": "4205f812"
     },
-    "dist/_astro/achievements.BYu86efr.css": {
-      "ipo_ts": 1780691031558,
-      "edit_count": 1,
-      "last_lines": 1,
-      "last_ts": 1780691031558,
-      "delisted": true,
-      "last_source": "onEdit",
-      "last_content_hash": "9850231",
-      "delisted_at": 1780826298837,
-      "delist_rounds": 0
-    },
-    "dist/_astro/ProjectProgressHUD.D4XANR3z.js": {
-      "ipo_ts": 1780691032067,
-      "edit_count": 1,
-      "last_lines": 1,
-      "last_ts": 1780691032067,
-      "delisted": true,
-      "last_source": "onEdit",
-      "last_content_hash": "3896d372",
-      "delisted_at": 1780826298837,
-      "delist_rounds": 0
-    },
-    "dist/_astro/AchievementsWall.c3EQUvtZ.js": {
-      "ipo_ts": 1780691032070,
-      "edit_count": 1,
-      "last_lines": 1,
-      "last_ts": 1780691032070,
-      "delisted": true,
-      "last_source": "onEdit",
-      "last_content_hash": "270090e6",
-      "delisted_at": 1780826298837,
-      "delist_rounds": 0
-    },
     "dist/_astro/BackButton.CKcCIV-3.js": {
       "ipo_ts": 1780691032070,
       "edit_count": 1,
@@ -778,54 +315,23 @@
       "last_source": "onEdit",
       "last_content_hash": "a7a6234a"
     },
-    "dist/_astro/XingQuotes.hOosBRWx.js": {
-      "ipo_ts": 1780691032071,
-      "edit_count": 1,
-      "last_lines": 1,
-      "last_ts": 1780691032071,
-      "delisted": true,
-      "last_source": "onEdit",
-      "last_content_hash": "59f5a86d",
-      "delisted_at": 1780826298837,
-      "delist_rounds": 0
-    },
-    "dist/_astro/achievements.85EHT_RZ.css": {
-      "ipo_ts": 1780691110076,
-      "edit_count": 1,
-      "last_lines": 1,
-      "last_ts": 1780691110076,
-      "delisted": false,
-      "last_source": "onEdit",
-      "last_content_hash": "986e2f21"
-    },
-    "dist/_astro/Footer.CMaeqVr6.js": {
-      "ipo_ts": 1780691110536,
-      "edit_count": 1,
-      "last_lines": 1,
-      "last_ts": 1780691110536,
-      "delisted": true,
-      "last_source": "onEdit",
-      "last_content_hash": "337dcca5",
-      "delisted_at": 1780826298837,
-      "delist_rounds": 0
-    },
     "src/pages/index.astro": {
       "ipo_ts": 1780691295747,
-      "edit_count": 4,
-      "last_lines": 78,
-      "last_ts": 1780691449228,
+      "edit_count": 6,
+      "last_lines": 52,
+      "last_ts": 1780839753520,
       "delisted": false,
       "last_source": "onEdit",
-      "last_content_hash": "ad5e8458"
+      "last_content_hash": "ea13227a"
     },
     "src/components/CardNav.tsx": {
       "ipo_ts": 1780691308988,
-      "edit_count": 1,
-      "last_lines": 134,
-      "last_ts": 1780691308988,
+      "edit_count": 3,
+      "last_lines": 135,
+      "last_ts": 1780840275655,
       "delisted": false,
       "last_source": "onEdit",
-      "last_content_hash": "a61eb41e"
+      "last_content_hash": "cf2fdc39"
     },
     "src/components/AchievementsCarousel.tsx": {
       "ipo_ts": 1780691342305,
@@ -845,50 +351,185 @@
       "last_source": "onEdit",
       "last_content_hash": "70568731"
     },
-    "dist/_astro/AchievementsWall.BnAITUFu.js": {
-      "ipo_ts": 1780691405161,
-      "edit_count": 1,
-      "last_lines": 1,
-      "last_ts": 1780691405161,
+    "src/content/achievements/index.md": {
+      "ipo_ts": 1780838047297,
+      "edit_count": 4,
+      "last_lines": 100,
+      "last_ts": 1780838156655,
       "delisted": false,
       "last_source": "onEdit",
-      "last_content_hash": "5d7ee4dc"
+      "last_content_hash": "12ae57cb"
     },
-    "dist/_astro/CardNav.J46UOKB3.js": {
-      "ipo_ts": 1780691405163,
-      "edit_count": 1,
-      "last_lines": 1,
-      "last_ts": 1780691405163,
+    "src/layouts/Layout.astro": {
+      "ipo_ts": 1780838617370,
+      "edit_count": 12,
+      "last_lines": 162,
+      "last_ts": 1780840886032,
       "delisted": false,
       "last_source": "onEdit",
-      "last_content_hash": "2486b0af"
+      "last_content_hash": "8b9c208e"
     },
-    "dist/_astro/Footer.l1Mkhtqt.js": {
-      "ipo_ts": 1780691405164,
-      "edit_count": 1,
-      "last_lines": 1,
-      "last_ts": 1780691405164,
+    "src/components/RevealText.tsx": {
+      "ipo_ts": 1780838984764,
+      "edit_count": 4,
+      "last_lines": 118,
+      "last_ts": 1780839134758,
       "delisted": false,
       "last_source": "onEdit",
-      "last_content_hash": "2bbd1523"
+      "last_content_hash": "d61a2279"
     },
-    "dist/_astro/ProjectProgressHUD.Diy29hf_.js": {
-      "ipo_ts": 1780691405165,
-      "edit_count": 1,
-      "last_lines": 1,
-      "last_ts": 1780691405165,
+    "src/components/KineticHeadline.tsx": {
+      "ipo_ts": 1780838999356,
+      "edit_count": 2,
+      "last_lines": 191,
+      "last_ts": 1780839159771,
       "delisted": false,
       "last_source": "onEdit",
-      "last_content_hash": "9eb896ee"
+      "last_content_hash": "430a81a7"
     },
-    "dist/_astro/XingQuotes.BYSJQUfS.js": {
-      "ipo_ts": 1780691405167,
+    "dist/_astro/ProjectProgressHUD.D4XANR3z.js": {
+      "ipo_ts": 1780839028358,
       "edit_count": 1,
       "last_lines": 1,
-      "last_ts": 1780691405167,
+      "last_ts": 1780839028358,
       "delisted": false,
       "last_source": "onEdit",
-      "last_content_hash": "ac93affd"
+      "last_content_hash": "3896d372"
+    },
+    "dist/_astro/RotatingText.CSQlz_0M.js": {
+      "ipo_ts": 1780839028359,
+      "edit_count": 1,
+      "last_lines": 2,
+      "last_ts": 1780839028359,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "c50ef69c"
+    },
+    "dist/_astro/TimeProgress.Bv2brTs4.js": {
+      "ipo_ts": 1780839028360,
+      "edit_count": 1,
+      "last_lines": 1,
+      "last_ts": 1780839028360,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "54563d76"
+    },
+    "dist/_astro/index.CE_ZcfCS.js": {
+      "ipo_ts": 1780839028361,
+      "edit_count": 1,
+      "last_lines": 9,
+      "last_ts": 1780839028361,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "ecf02bdb"
+    },
+    "dist/_astro/proxy.1Br27vlQ.js": {
+      "ipo_ts": 1780839028363,
+      "edit_count": 1,
+      "last_lines": 1,
+      "last_ts": 1780839028363,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "6e24c18c"
+    },
+    "dist/_astro/AchievementsWall.Dwyhq9yD.js": {
+      "ipo_ts": 1780839163715,
+      "edit_count": 1,
+      "last_lines": 1,
+      "last_ts": 1780839163715,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "98dd4839"
+    },
+    "dist/_astro/KineticHeadline.BbdPQ0D_.js": {
+      "ipo_ts": 1780839163718,
+      "edit_count": 1,
+      "last_lines": 17,
+      "last_ts": 1780839163718,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "4deb1612"
+    },
+    "dist/_astro/RevealText.7qCsk5tC.js": {
+      "ipo_ts": 1780839163719,
+      "edit_count": 1,
+      "last_lines": 8,
+      "last_ts": 1780839163719,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "110ea5fa"
+    },
+    "dist/_astro/RevealText.CSyPJVqM.js": {
+      "ipo_ts": 1780839163720,
+      "edit_count": 1,
+      "last_lines": 1,
+      "last_ts": 1780839163720,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "e08a6f8e"
+    },
+    "dist/_astro/XingQuotes.DQyJPDT2.js": {
+      "ipo_ts": 1780839163721,
+      "edit_count": 1,
+      "last_lines": 1,
+      "last_ts": 1780839163721,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "65aa35b0"
+    },
+    "src/styles/typography.css": {
+      "ipo_ts": 1780839509378,
+      "edit_count": 3,
+      "last_lines": 194,
+      "last_ts": 1780840886038,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "e072f4ce"
+    },
+    "tailwind.config.mjs": {
+      "ipo_ts": 1780840015074,
+      "edit_count": 2,
+      "last_lines": 52,
+      "last_ts": 1780840275829,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "dbd5e7b5"
+    },
+    "dist/_astro/achievements.BF4QZEIS.css": {
+      "ipo_ts": 1780840198219,
+      "edit_count": 1,
+      "last_lines": 1,
+      "last_ts": 1780840198219,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "c88b295"
+    },
+    "dist/_astro/CardNav.GfxOzmfA.js": {
+      "ipo_ts": 1780840198686,
+      "edit_count": 1,
+      "last_lines": 1,
+      "last_ts": 1780840198686,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "5c449e03"
+    },
+    "dist/_astro/Footer.cAzMsZsx.js": {
+      "ipo_ts": 1780840198689,
+      "edit_count": 1,
+      "last_lines": 1,
+      "last_ts": 1780840198689,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "cb7c83e0"
+    },
+    "dist/_astro/LightBackground.C6lCNsto.js": {
+      "ipo_ts": 1780840198690,
+      "edit_count": 1,
+      "last_lines": 1,
+      "last_ts": 1780840198690,
+      "delisted": false,
+      "last_source": "onEdit",
+      "last_content_hash": "676650fa"
     }
   }
 }
