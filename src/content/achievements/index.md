@@ -35,8 +35,9 @@ list:
     description: '独立完成一个可用产品：设计、开发、部署与迭代。'
     category: ['career']
     rarity: 'epic'
-    progressPct: 58
-    unlocked: false
+    progressPct: 100
+    unlocked: true
+	unlockedAt: '2026-06-02 09:22'
 
   - id: 'skill-01'
     icon: '⚙️'
@@ -72,8 +73,9 @@ list:
     description: '完整阅读一本自己喜欢的书'
     category: ['study', 'life']
     rarity: 'legendary'
-    progressPct: 10
-    unlocked: false
+    progressPct: 100
+    unlocked: true
+    unlockedAt: '2026-06-07 18:06'
 
   - id: 'study-03'
     icon: '✍️'
@@ -81,8 +83,18 @@ list:
     description: '书法练字，是自己变得更加平和'
     category: ['mindset', 'life']
     rarity: 'legendary'
-    progressPct: 20
+    progressPct: 80
     unlocked: false
+
+  - id: 'study-04'
+    icon: '🌐'
+    name: '个人网站部署'
+    description: '完成个人网站部署及相关美化'
+    category: ['study', 'career']
+    rarity: 'legendary'
+    progressPct: 100
+    unlocked: true
+    unlockedAt: '2026-06-07 18:06'
 ---
 
 这里是成就系统的总览，所有的成就数据均在此配置，页面会自动拉取展示。
